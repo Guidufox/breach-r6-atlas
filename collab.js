@@ -6,20 +6,20 @@
   dialog.innerHTML=`<button class="dialog-close" id="roomClose" aria-label="Close">×</button><div class="eyebrow">R6- FLAMINGO/STRAT · 5</div><h2 data-room-text="roomTitle"></h2><p data-room-text="roomIntro"></p><label class="field-label" for="roomName" data-room-text="roomName"></label><input id="roomName" class="text-field" maxlength="30" autocomplete="nickname"><div id="roomSetup"><button id="roomCreate" class="primary" data-room-text="roomCreate"></button><label class="field-label" for="roomInvite" data-room-text="roomInvite"></label><input id="roomInvite" class="text-field" type="text" autocomplete="off" spellcheck="false"><button id="roomJoin" class="secondary" data-room-text="roomJoin"></button></div><button id="roomRecovery" class="secondary" data-room-text="roomRecovery" hidden></button><p id="roomStatus" role="status" aria-live="polite"></p><section id="roomLive" hidden><label class="field-label" for="roomLink" data-room-text="roomLink"></label><input id="roomLink" class="text-field" readonly><button id="roomCopy" class="secondary" data-room-text="roomCopy"></button><ul id="roomMembers"></ul><button id="roomDownload" class="secondary" data-room-text="roomDownload"></button><button id="roomLeave" class="secondary" data-room-text="roomLeave"></button></section><p class="credit" data-room-text="roomLimit"></p>`;
   document.body.append(dialog);
   let peer=null,host=false,upstream=null,meta=null,secret='',roomId='',name='',doc=null,baseline=null,seq=0,lastSeq=-1,connections=new Map(),pending=new Map(),timer=null,connectTimer=null,joining=false;
-  let library,lastPacket=null;
+  let library,lastPacket=null,currentMembers=[];
   let inbound=Promise.resolve();
   const language=()=>document.documentElement.lang.toLowerCase();
   const text=(key,values={})=>(window.BREACH_I18N[language()]?.[key]||window.BREACH_I18N.es[key]||key).replace(/\{(\w+)\}/g,(_,k)=>values[k]??'');
-  function translate(){dialog.querySelectorAll('[data-room-text]').forEach(e=>e.textContent=text(e.dataset.roomText));$('roomClose').setAttribute('aria-label',text('close'));$('teamRoomBtn').title=text('roomTitle');}
+  function translate(){dialog.querySelectorAll('[data-room-text]').forEach(e=>e.textContent=text(e.dataset.roomText));$('roomClose').setAttribute('aria-label',text('close'));$('teamRoomBtn').title=text('roomTitle');if(doc&&currentMembers.length)showMembers(currentMembers);}
   new MutationObserver(translate).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});translate();
   const status=key=>$('roomStatus').textContent=text(key);
   const nickname=()=>($('roomName').value.trim()||text('playerN',{n:1})).slice(0,30);
   const loadLibrary=()=>library ||= new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='vendor/peerjs.min.js';script.onload=resolve;script.onerror=()=>{library=null;reject(new Error('roomNetwork'));};document.head.append(script);});
   function invite(){const url=new URL(location.href);url.hash=new URLSearchParams({room:roomId,key:secret}).toString();return url.href;}
   function parseInvite(value){try{const url=new URL(value);if(!['https:','http:'].includes(url.protocol))throw 0;const params=new URLSearchParams(url.hash.slice(1)),id=params.get('room'),key=params.get('key');if(!/^r6f-[a-f\d-]{36}$/.test(id)||!/^[a-f\d]{32}$/.test(key))throw 0;return{id,key};}catch{throw new Error('roomInvalidInvite');}}
-  function send(connection,message){if(connection?.open)try{connection.send(message);}catch{status('roomNetwork');}}
+  function send(connection,message){if(connection?.open)try{connection.send(JSON.parse(JSON.stringify(message)));}catch{status('roomNetwork');}}
   function roster(){return [{id:peer.id,name,host:true},...[...connections.values()].filter(c=>c.accepted).map(c=>({id:c.peer,name:c.memberName,host:false}))];}
-  function showMembers(members){$('roomMembers').replaceChildren();for(const member of members){const li=document.createElement('li');li.textContent=member.name+(member.host?' · '+text('roomHost'):'');$('roomMembers').append(li);} $('teamRoomBtn').textContent=text('roomCount',{n:members.length});}
+  function showMembers(members){currentMembers=members;$('roomMembers').replaceChildren();for(const member of members){const li=document.createElement('li');li.textContent=member.name+(member.host?' · '+text('roomHost'):'');$('roomMembers').append(li);} $('teamRoomBtn').textContent=text('roomCount',{n:members.length});}
   function broadcast(message){for(const connection of connections.values())if(connection.accepted)send(connection,message);}
   function publishRoster(){const members=roster();showMembers(members);broadcast({type:'members',members});}
   function live(){clearTimeout(connectTimer);joining=false;$('roomSetup').hidden=true;$('roomLive').hidden=false;$('roomLink').value=invite();$('teamRoomBtn').classList.add('active');status('roomConnected');}
@@ -52,7 +52,7 @@
     if(peer||joining)return;if(!window.R6TeamBridge){status('roomNotReady');return;}
     joining=true;$('roomCreate').disabled=true;$('roomJoin').disabled=true;status('roomConnecting');
     try{
-      if(!window.isSecureContext)throw new Error('roomHTTPS');
+      if(location.protocol!=='https:'||!window.isSecureContext)throw new Error('roomHTTPS');
       if(!window.RTCPeerConnection)throw new Error('roomUnsupported');
       name=nickname();host=asHost;seq=0;lastSeq=-1;
       let destination;if(!host)destination=parseInvite($('roomInvite').value);
@@ -69,7 +69,7 @@
           catch(error){stop(error.message);}
         } else {
           roomId=destination.id;secret=destination.key;
-          upstream=peer.connect(roomId,{reliable:true,serialization:'json'});
+          upstream=peer.connect(roomId,{reliable:true,serialization:'binary'});
           upstream.on('open',()=>send(upstream,{type:'hello',secret,name}));
           upstream.on('data',message=>{inbound=inbound.then(async()=>{
             if(!validMessage(message)||!peer)return;
