@@ -39,6 +39,7 @@
   let bombAnchors=new Map(),selectedSite=null,pendingUpdate=null,updateBusy=false;
   let recovery=null,recoveryLayer=null,comparison=null,receivedPlan=null,discordBusy=false;
   let challenge={attempts:0,correct:0,resolved:false};
+  let roomPersonal=null,roomMap=null,roomApplying=false;
 
   function t(key,values={}){const s=window.BREACH_I18N[config.language]?.[key]||window.BREACH_I18N.es[key]||key;return s.replace(/\{(\w+)\}/g,(_,k)=>values[k]??'');}
   function mapName(m=map){return m.names?.[config.language]||m.name;}
@@ -63,7 +64,7 @@
   function el(tag,className,text) { const e=document.createElement(tag); if(className)e.className=className; if(text!==undefined)e.textContent=text; return e; }
   function node(tag,attrs={},parent) { const e=document.createElementNS(NS,tag); for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v); if(parent)parent.append(e); return e; }
   function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,3000);}
-  function save(){ config.map=map.id;config.floor=floor;config.actionRevisions[map.id]={revision:map.revision,sourceSha256:map.sourceSha256}; try{localStorage.setItem(STORE,JSON.stringify(config));$('saveStatus').textContent=t('saved');}catch{$('saveStatus').textContent=t('noSave');} }
+  function save(){ if(roomMap){if(!roomApplying)window.R6Collab?.localChanged();$('saveStatus').textContent=t('roomTemporary');return;} config.map=map.id;config.floor=floor;config.actionRevisions[map.id]={revision:map.revision,sourceSha256:map.sourceSha256}; try{localStorage.setItem(STORE,JSON.stringify(config));$('saveStatus').textContent=t('saved');}catch{$('saveStatus').textContent=t('noSave');} }
   function shortFloor(f,m=map){return f===-1?'SS':f===0?'B':f===m.maxFloorNumber && f>1?'RF':f+'F';}
   function floorName(f,m=map){return f===-1?t('subBasement'):f===0?t('basement'):f===m.maxFloorNumber && f>1?t('roof'):f===1?t('ground'):t('upperFloor',{n:config.language==='en'?f:f-1});}
   function keyFor(label){return map.id+':'+label.floor+':'+label.id;}
@@ -99,11 +100,12 @@
     $('favoriteMapBtn').setAttribute('aria-label',t(config.favoriteMaps.includes(map.id)?'favoriteRemove':'favoriteAdd',{name:mapName()}));
   }
   async function loadMap(id){
+    if(roomMap&&id!==roomMap){toast(t('roomMapLocked'));return;}
     const next=DATA.maps.find(m=>m.id===id);if(!next)return;if(recovery&&id!==map.id)endRecovery();
     const seq=++loadSequence;$('loading').hidden=false;
     try{
       if(window.BreachModules.updates.available){const local=await window.BreachModules.updates.get(id);if(local?.svg)window.R6_MAPS[id]=local.svg;}
-      if(!window.R6_MAPS[id])await new Promise((resolve,reject)=>{const s=el('script');s.src='maps/'+id+'.js';s.onload=()=>{s.remove();resolve();};s.onerror=()=>{s.remove();reject(new Error(t('missingMap')));};document.head.append(s);});
+      if(!window.R6_MAPS[id])await new Promise((resolve,reject)=>{const s=el('script');s.src='maps/'+id+'.js?v=maps-lite-1';s.onload=()=>{s.remove();resolve();};s.onerror=()=>{s.remove();reject(new Error(t('missingMap')));};document.head.append(s);});
       if(seq!==loadSequence)return;
       map=next;floor=map.floors.includes(floor)?floor:(map.floors.includes(1)?1:map.floors[0]??1);
       selected=null;studyTarget=null;studyLast=null;reviewQueue=[];
@@ -548,6 +550,7 @@
     const lines=[...Object.values(incoming.notes),...Object.values(incoming.siteNotes),...tasks.map((x,i)=>(x.done?'[x] ':'[ ] ')+(x.name||t('playerN',{n:i+1}))+': '+x.task+(x.point?' · '+x.point.floor+'F / '+(target.labels.find(l=>l.id===x.point.id)?.names?.[config.language]||x.point.id):'')),...checks.map(x=>(x.done?'[x] ':'[ ] ')+x.text),...incoming.actions[target.id].map(a=>shortFloor(a.floor,target)+' · '+(a.kind==='pin'?a.label:a.kind==='line'?t('route'):t('freehand')))];$('receivedPlanDetails').textContent=lines.join('\n').slice(0,100000);$('planPreviewDialog').showModal();
   }
   async function acceptPlan(){
+    if(roomMap){toast(t('roomMapLocked'));return;}
     if(!receivedPlan)return;const {raw,incoming,target,mismatch}=receivedPlan;receivedPlan=null;
     config.notes={...config.notes,...incoming.notes};config.siteNotes={...config.siteNotes,...incoming.siteNotes};config.aliases={...config.aliases,...incoming.aliases};config.teamTasks={...config.teamTasks,...incoming.teamTasks};config.checklists={...config.checklists,...incoming.checklists};
     const actions=incoming.actions[target.id];if(mismatch)archiveActions({...target,revision:raw.map.revision,sourceSha256:raw.map.sourceSha256},actions);else{const known=new Set((config.actions[target.id]||[]).map(a=>a.id));config.actions[target.id]=[...(config.actions[target.id]||[]),...actions.filter(a=>!known.has(a.id))];}
@@ -640,4 +643,42 @@
     if(e.key==='Escape'){selected=null;selectionLayer?.replaceChildren();$('selectedTag').hidden=true;renderCallDetails();}
   });
   applyLanguage();setTool('move');renderMaps();await loadMap(map.id);receiveHash();
+
+  function roomSnapshot(){
+    const data={};for(const key of ['actions','notes','siteNotes','teamTasks','checklists','aliases'])data[key]=config[key];
+    return {map:{id:map.id,revision:map.revision,sourceSha256:map.sourceSha256},floor,data};
+  }
+  function applyRoomData(data){
+    const clean=safeBackup({app:'breach-r6-atlas',version:1,data});
+    for(const key of ['notes','siteNotes','teamTasks','checklists','aliases']){
+      for(const k of Object.keys(config[key]))if(k.startsWith(roomMap+':'))delete config[key][k];
+      Object.assign(config[key],clean[key]);
+    }
+    config.actions[roomMap]=clean.actions[roomMap];
+  }
+  function refreshRoom(){
+    const active=document.activeElement,identity=active?.id?{id:active.id}:active?.getAttribute('aria-label')?{label:active.getAttribute('aria-label')}:null;
+    const start=active?.selectionStart,end=active?.selectionEnd;
+    renderAnnotations();renderNotes();renderCalls();
+    let replacement=identity?.id?$(identity.id):identity?.label?[...document.querySelectorAll('input,textarea,select')].find(e=>e.getAttribute('aria-label')===identity.label):null;
+    if(replacement){replacement.focus({preventScroll:true});if(typeof start==='number'&&replacement.setSelectionRange)try{replacement.setSelectionRange(start,end);}catch{}}
+  }
+  window.R6TeamBridge={
+    snapshot:roomSnapshot,
+    async begin(meta,data,initialFloor){
+      const target=DATA.maps.find(m=>m.id===meta.id);
+      if(!target||target.revision!==meta.revision||target.sourceSha256!==meta.sourceSha256)throw new Error('roomRevision');
+      if(roomMap)throw new Error('roomAlready');
+      roomPersonal=JSON.parse(JSON.stringify(config));roomMap=meta.id;roomApplying=true;$('updatesBtn').disabled=true;$('backupBtn').disabled=true;
+      try{applyRoomData(data);floor=target.floors.includes(initialFloor)?initialFloor:target.floors[0];await loadMap(target.id);if(map.id!==target.id)throw new Error('roomInvalid');save();}
+      catch(error){config=roomPersonal;roomMap=null;roomPersonal=null;$('updatesBtn').disabled=false;$('backupBtn').disabled=false;await loadMap(config.map);throw error;}
+      finally{roomApplying=false;}
+    },
+    apply(data){roomApplying=true;try{applyRoomData(data);refreshRoom();save();}finally{roomApplying=false;}},
+    async end(){if(!roomMap)return;const personal=roomPersonal;roomMap=null;roomPersonal=null;config=personal;$('updatesBtn').disabled=false;$('backupBtn').disabled=false;floor=config.floor;await loadMap(config.map);applyLanguage();renderAnnotations();},
+    packet(){const snapshot=roomSnapshot();const data=window.R6RoomCore.inflate(window.R6RoomCore.flatten(snapshot.data,map.id),map.id);return {app:'breach-strategy',version:1,date:new Date().toISOString(),map:snapshot.map,floor,view:view.slice(),site:selectedSite?.id||'',language:config.language,data};},
+    export(packet){const value=packet||this.packet();download(JSON.stringify(value,null,2),'R6-flamingo-strat-team-'+value.map.id+'.json','application/json');},
+  };
+
+  document.dispatchEvent(new Event('r6-ready'));
 })();
