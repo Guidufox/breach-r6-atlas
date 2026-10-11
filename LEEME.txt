@@ -193,5 +193,5 @@ NOVEDADES 1.3.0 — OPCIONES 16, 17, 21, 22, 24 Y 26
 
 Tareas y listas están en el respaldo general y en el JSON de plan; PNG muestra
 una vista previa y PDF conserva el texto completo. Se mantienen las mejoras de
-las versiones anteriores. La web y el dominio todavía no están publicados.
+las versiones anteriores. La web está publicada en https://guidufox.github.io/breach-r6-atlas/ con la dirección gratuita de GitHub Pages.
 El envío por webhook no incorpora un bot ni comandos de Discord.

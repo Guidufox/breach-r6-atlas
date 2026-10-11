@@ -12,7 +12,7 @@ Para conservar datos al cambiar de carpeta, PC o navegador, exportar/importar un
 
 Fuentes y licencias: [FUENTES-NOMBRES.txt](FUENTES-NOMBRES.txt), [LICENSE-R6MAPS.txt](LICENSE-R6MAPS.txt) y `vendor/LICENSE-*.txt`.
 
-Tareas para cinco jugadores, checklist por sitio, comparación de revisiones, recuperación revisada de dibujos, compartir mediante Discord y enlaces/códigos con vista previa antes de importar. Tareas y listas incluidas en respaldos y exportaciones. La publicación web/dominio permanece pendiente.
+Tareas para cinco jugadores, checklist por sitio, comparación de revisiones, recuperación revisada de dibujos, compartir mediante Discord y enlaces/códigos con vista previa antes de importar. Tareas y listas incluidas en respaldos y exportaciones. La web está publicada en GitHub Pages con su dirección gratuita.
 
 ## Repositorio y web
 
