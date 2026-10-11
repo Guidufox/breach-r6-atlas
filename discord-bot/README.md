@@ -106,3 +106,5 @@ Fuentes de desarrollo consultadas: documentación oficial de Discord y discord.j
 La tipografía DejaVu se distribuye con su licencia en tools/fonts.
 
 Desde este repositorio, el generador usa los mapas de la carpeta superior. Ejecutar npm ci y npm run build:images dentro de discord-bot antes de iniciar o probar el bot.
+
+Web pública del Atlas: https://guidufox.github.io/breach-r6-atlas/. El ejemplo de ATLAS_URL ya incluye esta dirección para el botón del bot. La aplicación de Discord todavía requiere configuración y activación propias.

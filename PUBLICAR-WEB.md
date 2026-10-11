@@ -1,8 +1,8 @@
 # Publicación en GitHub Pages
 
-Repositorio previsto: Guidufox/breach-r6-atlas.
-URL prevista: https://guidufox.github.io/breach-r6-atlas/.
-Estado: preparada localmente; pendiente de crear el repositorio y activar Pages.
+Repositorio: https://github.com/Guidufox/breach-r6-atlas.
+Web: https://guidufox.github.io/breach-r6-atlas/.
+Estado: publicada el 11 de octubre de 2026 con GitHub Pages. Primer despliegue confirmado: Actions run 38137755498, commit 9cd322699d2ce7565fc0cd173acbe66addc8168b. HTTPS activo.
 
 En Settings → Pages → Source elegir GitHub Actions. El flujo Publicar Breach publica únicamente los archivos públicos preparados por tools/build_site.py. Los cambios en main vuelven a publicar la web. No se usa un dominio propio.
 

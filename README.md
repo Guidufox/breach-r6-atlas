@@ -17,3 +17,6 @@ Tareas para cinco jugadores, checklist por sitio, comparación de revisiones, re
 ## Repositorio y web
 
 Este repositorio reúne Breach R6 Atlas 1.3.0 y el bot Discord 1.0.0 en discord-bot/. La web funciona como sitio estático de GitHub Pages; el bot requiere Node.js y un proceso separado. Ver PUBLICAR-WEB.md para el estado de publicación.
+
+Web pública: https://guidufox.github.io/breach-r6-atlas/
+Repositorio: https://github.com/Guidufox/breach-r6-atlas
