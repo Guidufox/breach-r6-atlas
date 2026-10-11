@@ -1,0 +1,24 @@
+name: Verificar bot
+on:
+  push:
+    branches: [main]
+    paths: ['discord-bot/**', 'maps/**', 'data.js', 'advanced.js', '.github/workflows/check-bot.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24.17.0'
+          cache: npm
+          cache-dependency-path: discord-bot/package-lock.json
+      - run: npm ci --no-fund
+        working-directory: discord-bot
+      - run: npm run build:images
+        working-directory: discord-bot
+      - run: npm test
+        working-directory: discord-bot

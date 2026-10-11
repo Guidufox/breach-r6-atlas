@@ -1,0 +1,36 @@
+name: Consultar revisiones de R6Calls
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Crear paquetes sin reemplazar mapas instalados
+        run: python3 tools/create_updates.py
+      - name: Guardar catalogo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add updates
+          if ! git diff --cached --quiet; then
+            git commit -m "Actualizar catalogo de revisiones de R6Calls"
+            git push
+          fi
+      - uses: actions/configure-pages@v5
+      - run: python3 tools/build_site.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v4
+        id: deployment
