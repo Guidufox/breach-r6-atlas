@@ -20,3 +20,5 @@ Este repositorio reúne Breach R6 Atlas 1.3.0 y el bot Discord 1.0.0 en discord-
 
 Web pública: https://guidufox.github.io/breach-r6-atlas/
 Repositorio: https://github.com/Guidufox/breach-r6-atlas
+
+Paneles laterales: Mostrar/Ocultar mapas y Mostrar/Ocultar detalles funcionan por separado y recuerdan la elección en este navegador. En pantallas de hasta 800 px comienzan cerrados; cada panel tiene un botón para cerrar y volver al mapa. Las preferencias de PC y pantalla pequeña se guardan por separado.
