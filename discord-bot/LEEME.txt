@@ -1,0 +1,38 @@
+BREACH — BOT DE DISCORD 1.0.0
+
+Extrae TODO el ZIP antes de ejecutar los BAT.
+Necesita Node.js 24.17 o posterior: https://nodejs.org/
+
+ORDEN
+1. Instalar-Bot.bat
+2. Crear tu aplicacion en https://discord.com/developers/applications
+   Copiar Application ID y generar el token del bot.
+   Activar Modo desarrollador en Discord y copiar el ID de tu servidor.
+3. Configurar-Bot.bat: IDs, idioma y token oculto.
+4. Abrir Invitar-Bot.txt e instalar el bot en tu servidor.
+5. Registrar-Comandos.bat
+6. Iniciar-Bot.bat. Mantener esa ventana abierta.
+
+PROBAR EN DISCORD
+/mapa mapa:Banco idioma:Español piso:Todos
+/bot es un alias. /ayuda explica los comandos.
+Usa el autocompletado para elegir mapa y piso.
+
+Incluye 29 mapas base. Instalar-Bot.bat genera 342 imagenes por piso/idioma
+(EN, ES, PT-BR) durante la primera instalacion; puede tardar unos minutos.
+Cada imagen tiene callouts y bombas disponibles, con su revision.
+Los controles cambian piso e idioma. District tiene solo vista general sin
+callouts originales. Los nombres dentro de las capturas no se repintan.
+
+Necesita Internet al instalar y mientras responde en Discord.
+Tu PC encendida, sin suspenderse, y el bot iniciado. Para 24/7 se necesita hosting.
+El token queda en .env y no debe compartirse ni subirse a GitHub.
+No actives permisos de Administrador ni intenciones privilegiadas.
+Verificar-Bot.bat comprueba configuracion y archivos, sin enviar mensajes.
+
+GUIA COMPLETA Y ERRORES: README.md, abrilo con un editor de texto.
+Las pruebas realizadas son locales y simuladas. Aun no se conecto una
+aplicacion real de Discord ni se probo el instalador en Windows.
+La app portable anterior y la publicacion web/dominio se conservan aparte.
+
+Desde este repositorio, el generador usa los mapas de la carpeta superior. Ejecutar npm ci y npm run build:images dentro de discord-bot antes de iniciar o probar el bot.
