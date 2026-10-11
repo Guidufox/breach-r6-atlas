@@ -4,7 +4,7 @@
   const script = source => new Promise((resolve,reject)=>{const node=document.createElement('script');node.src=source;node.onload=resolve;node.onerror=reject;document.head.append(node);});
   async function open(){
     const button=document.getElementById('teamRoomBtn');button.disabled=true;
-    try{loading ||= script('collab-core.js?v=team-1').then(()=>script('collab.js?v=team-2'));await loading;window.R6Collab.open();}
+    try{loading ||= script('collab-core.js?v=team-1').then(()=>script('collab.js?v=https-1'));await loading;window.R6Collab.open();}
     catch{loading=null;button.textContent=document.documentElement.lang==='es'?'Reintentar sala':'Retry room';}
     finally{button.disabled=false;}
   }
