@@ -1,4 +1,4 @@
-# Breach — R6 Atlas
+# R6- flamingo/strat
 
 App portable y web para estudiar mapas y preparar estrategias de Rainbow Six Siege. Interfaz y callouts en inglés, español y portugués de Brasil, con referencias documentadas de R6Calls y nombres de mapas contrastados con Ubisoft.
 
@@ -22,3 +22,7 @@ Web pública: https://guidufox.github.io/breach-r6-atlas/
 Repositorio: https://github.com/Guidufox/breach-r6-atlas
 
 Paneles laterales: Mostrar/Ocultar mapas y Mostrar/Ocultar detalles funcionan por separado y recuerdan la elección en este navegador. En pantallas de hasta 800 px comienzan cerrados; cada panel tiene un botón para cerrar y volver al mapa. Las preferencias de PC y pantalla pequeña se guardan por separado.
+
+Paneles laterales: controles con iconos y transición suave. En móvil se muestran como cajones sobre el mapa; se cierran con su botón, tocando el fondo o con Escape. Se respeta la preferencia de movimiento reducido.
+
+Icono de Rainbow Six Siege: asset original de Ubisoft, obtenido de https://static-dm.ubisoft.com/siege/prod/r6x_favicon_144.png, usado en https://www.ubisoft.com/en-us/game/rainbow-six/siege (11 oct. 2026). Rainbow Six y su icono pertenecen a Ubisoft. Esta herramienta es un proyecto de la comunidad.

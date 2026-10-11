@@ -363,7 +363,7 @@
   function exportView(){
     if(!svg)return;const copy=svg.cloneNode(true);copy.querySelector('[data-breach="recovery"]')?.remove();copy.setAttribute('width','1920');copy.setAttribute('height','1080');copy.setAttribute('xmlns',NS);
     const box=view.slice();copy.setAttribute('viewBox',box.join(' '));const background=node('rect',{x:box[0],y:box[1],width:box[2],height:box[3],fill:'#10171c'});copy.insertBefore(background,copy.firstChild);
-    download(new XMLSerializer().serializeToString(copy),'Breach-'+map.id+'-'+shortFloor(floor)+'-'+config.language+'.svg','image/svg+xml');toast(t('viewExported'));
+    download(new XMLSerializer().serializeToString(copy),'R6-flamingo-strat-'+map.id+'-'+shortFloor(floor)+'-'+config.language+'.svg','image/svg+xml');toast(t('viewExported'));
   }
   function shareSVG(){
     const copy=svg.cloneNode(true);copy.querySelector('[data-breach="recovery"]')?.remove();copy.setAttribute('xmlns',NS);copy.setAttribute('width','2000');copy.setAttribute('height','1125');copy.setAttribute('viewBox',view.join(' '));
@@ -373,13 +373,13 @@
   async function exportRaster(kind){
     if(!svg||updateBusy)return;updateBusy=true;toast(t('exporting'));
     try{const canvas=await window.BreachModules.rasterize(shareSVG()),title=mapName()+' / '+floorName(floor),subtitle=[selectedSite?t('siteNumber',{n:selectedSite.id}):t('allSites'),languageCode(),'r'+map.revision].join(' · '),visible=Object.keys(layers).filter(id=>config.layers[id]&&(byId(floor+'-'+id)||byId('bg-'+id))&&!(mode==='study'&&id==='txt')).map(id=>t('layer_'+id));
-      const name='Breach-'+map.id+'-'+shortFloor(floor)+'-'+config.language;
+      const name='R6-flamingo-strat-'+map.id+'-'+shortFloor(floor)+'-'+config.language;
       if(kind==='pdf')download(window.BreachModules.makePDF(canvas.toDataURL('image/jpeg',.9),title,subtitle,visible,shareNotes(),t),name+'.pdf','application/pdf');
       else{const output=window.BreachModules.makePNG(canvas,title,subtitle,visible,shareNotes(),t),blob=await new Promise((resolve,reject)=>output.toBlob(b=>b?resolve(b):reject(new Error()),'image/png'));download(blob,name+'.png','image/png');}
       toast(t('exportDone'));
     }catch{toast(t('exportFailed'));}finally{updateBusy=false;}
   }
-  function exportPlan(){download(JSON.stringify(planPacket(),null,2),'Breach-plan-'+map.id+'-'+shortFloor(floor)+'.json','application/json');}
+  function exportPlan(){download(JSON.stringify(planPacket(),null,2),'R6-flamingo-strat-plan-'+map.id+'-'+shortFloor(floor)+'.json','application/json');}
   function archiveActions(m,actions= config.actions[m.id]||[]){const item={id:crypto.randomUUID(),revision:m.revision,sourceSha256:m.sourceSha256,created:new Date().toISOString(),actions:JSON.parse(JSON.stringify(actions))};config.annotationArchives[m.id]=[item,...(config.annotationArchives[m.id]||[])].slice(0,6);return item.id;}
   async function importPlan(e){const file=e.target.files[0];if(!file)return;try{if(file.size>12*1024*1024)throw {code:'badPlan'};reviewPlan(JSON.parse(await file.text()));}catch(error){toast(t(error.code||'badPlan'));}e.target.value='';}
   function updateError(error){toast(t(error.code||'badUpdate'));$('updateStatus').textContent=t(error.code||'badUpdate');}
@@ -389,9 +389,9 @@
   async function renderUpdateHistory(){
     const list=$('updateHistory');list.replaceChildren();let record;
     try{if(window.BreachModules.updates.available)record=await window.BreachModules.updates.get(map.id);}catch{}
-    for(const [index,item] of (record?.previous||[]).entries()){const row=el('div','revision-row');row.append(el('span','',item.at.slice(0,10)));const button=el('button','secondary',t('restoreRevision',{revision:item.metadata.revision}));button.onclick=()=>restoreUpdate(index);row.append(button);const compare=el('button','secondary',t('compare'));compare.onclick=()=>showComparison({metadata:item.metadata,svg:item.svg},{metadata:map,svg:window.R6_MAPS[map.id]});row.append(compare);if(item.actions?.length){const recover=el('button','secondary',t('recoverDrawings'));recover.onclick=()=>startRecovery({id:item.archiveId,revision:item.metadata.revision,actions:item.actions});row.append(recover);}if(item.actions?.length){const exportButton=el('button','secondary','JSON');exportButton.onclick=()=>download(JSON.stringify({app:'breach-strategy',version:1,map:{id:map.id,revision:item.metadata.revision,sourceSha256:item.metadata.sourceSha256},floor:item.actions[0].floor,data:{actions:{[map.id]:item.actions}}},null,2),'Breach-historial-'+map.id+'-r'+item.metadata.revision+'.json','application/json');row.append(exportButton);}list.append(row);}
+    for(const [index,item] of (record?.previous||[]).entries()){const row=el('div','revision-row');row.append(el('span','',item.at.slice(0,10)));const button=el('button','secondary',t('restoreRevision',{revision:item.metadata.revision}));button.onclick=()=>restoreUpdate(index);row.append(button);const compare=el('button','secondary',t('compare'));compare.onclick=()=>showComparison({metadata:item.metadata,svg:item.svg},{metadata:map,svg:window.R6_MAPS[map.id]});row.append(compare);if(item.actions?.length){const recover=el('button','secondary',t('recoverDrawings'));recover.onclick=()=>startRecovery({id:item.archiveId,revision:item.metadata.revision,actions:item.actions});row.append(recover);}if(item.actions?.length){const exportButton=el('button','secondary','JSON');exportButton.onclick=()=>download(JSON.stringify({app:'breach-strategy',version:1,map:{id:map.id,revision:item.metadata.revision,sourceSha256:item.metadata.sourceSha256},floor:item.actions[0].floor,data:{actions:{[map.id]:item.actions}}},null,2),'R6-flamingo-strat-historial-'+map.id+'-r'+item.metadata.revision+'.json','application/json');row.append(exportButton);}list.append(row);}
     if(!record?.previous?.length)list.append(el('p','',t('noHistory')));
-    for(const item of config.annotationArchives[map.id]||[]){const row=el('div','revision-row');row.append(el('small','',t('revisionArchive',{revision:item.revision,n:item.actions.length})));const button=el('button','secondary','JSON');button.onclick=()=>download(JSON.stringify({app:'breach-strategy',version:1,date:item.created,map:{id:map.id,revision:item.revision,sourceSha256:item.sourceSha256},floor:item.actions[0]?.floor??floor,data:{actions:{[map.id]:item.actions}}},null,2),'Breach-archivo-'+map.id+'-r'+item.revision+'.json','application/json');list.append(row);row.append(button);if(item.actions.length){const recover=el('button','secondary',t('recoverDrawings'));recover.onclick=()=>startRecovery(item);row.append(recover);}}
+    for(const item of config.annotationArchives[map.id]||[]){const row=el('div','revision-row');row.append(el('small','',t('revisionArchive',{revision:item.revision,n:item.actions.length})));const button=el('button','secondary','JSON');button.onclick=()=>download(JSON.stringify({app:'breach-strategy',version:1,date:item.created,map:{id:map.id,revision:item.revision,sourceSha256:item.sourceSha256},floor:item.actions[0]?.floor??floor,data:{actions:{[map.id]:item.actions}}},null,2),'R6-flamingo-strat-archivo-'+map.id+'-r'+item.revision+'.json','application/json');list.append(row);row.append(button);if(item.actions.length){const recover=el('button','secondary',t('recoverDrawings'));recover.onclick=()=>startRecovery(item);row.append(recover);}}
   }
   async function previewUpdate(packet){
     const target=DATA.maps.find(m=>m.id===packet.map?.id);if(!target)throw {code:'badUpdate'};
@@ -481,7 +481,7 @@
   $('revealBtn').onclick=()=>{if(!studyTarget)return;$('revealBtn').hidden=true;$('studyRating').hidden=false;if(config.studyKind==='locate'){challenge.resolved=true;markPoint(callPoint(studyTarget));$('challengeFeedback').hidden=false;$('challengeFeedback').textContent=t('challengeRevealed');}renderStudyText();};
   $('studyKnown').onclick=()=>{if(!studyTarget)return;if(config.studyKind==='locate'){nextStudy();return;}reviewQueue=reviewQueue.filter(id=>id!==studyTarget.id);sessionKnown++;config.study.known=(config.study.known||0)+1;save();nextStudy();};
   $('studyAgain').onclick=()=>{if(!studyTarget)return;if(!reviewQueue.includes(studyTarget.id))reviewQueue.push(studyTarget.id);sessionAgain++;config.study.again=(config.study.again||0)+1;save();nextStudy();};
-  $('exportBackup').onclick=()=>{download(JSON.stringify({app:'breach-r6-atlas',version:1,exported:new Date().toISOString(),data:config},null,2),'Breach-respaldo-'+new Date().toISOString().slice(0,10)+'.json','application/json');toast(t('backupExported'));};
+  $('exportBackup').onclick=()=>{download(JSON.stringify({app:'breach-r6-atlas',version:1,exported:new Date().toISOString(),data:config},null,2),'R6-flamingo-strat-respaldo-'+new Date().toISOString().slice(0,10)+'.json','application/json');toast(t('backupExported'));};
   $('importBackup').onchange=async e=>{
     const file=e.target.files[0];if(!file)return;
     try{
@@ -532,12 +532,12 @@
     $('shareBase').value=config.shareBase||(/^https:/.test(location.href)?location.href.split('#')[0].split('?')[0]:'');$('planLinkOutput').value='';$('linkStatus').textContent='';$('discordStatus').textContent='';$('discordMessage').value=discordText();$('shareDialog').showModal();
   }
   function generateLink(){try{const base=$('shareBase').value.trim();$('planLinkOutput').value=window.BreachAdvanced.planLink(planPacket(),base);config.shareBase=base;save();$('linkStatus').textContent=base?'':t('localCode');}catch(error){$('linkStatus').textContent=t(error.code||'badShareURL');}}
-  function discordText(){const notes=[preparationText(),config.notes[noteKey()]||'',selectedSite?config.siteNotes[map.id+':'+selectedSite.id]||'':''].filter(Boolean).join('\n\n');return ('Breach · '+scopeCaption()+' · '+floorName(floor)+' · r'+map.revision+'\n\n'+notes).slice(0,1850);}
+  function discordText(){const notes=[preparationText(),config.notes[noteKey()]||'',selectedSite?config.siteNotes[map.id+':'+selectedSite.id]||'':''].filter(Boolean).join('\n\n');return ('R6- flamingo/strat · '+scopeCaption()+' · '+floorName(floor)+' · r'+map.revision+'\n\n'+notes).slice(0,1850);}
   async function sendDiscord(){
     if(discordBusy)return;let url;try{url=window.BreachAdvanced.webhookURL($('discordWebhook').value.trim()).href;}catch{ $('discordStatus').textContent=t('badWebhook');return;}
     const message=$('discordMessage').value.trim();if(!message){$('discordStatus').textContent=t('discordIntro');return;}
     discordBusy=true;$('sendDiscord').disabled=true;$('discordStatus').textContent=t('sendingDiscord');const snapshot=planPacket(),files=[];
-    try{if($('attachPNG').checked)files.push({name:'Breach-'+snapshot.map.id+'.png',blob:await pngBlob()});if($('attachJSON').checked)files.push({name:'Breach-plan-'+snapshot.map.id+'.json',blob:new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'})});await window.BreachAdvanced.sendWebhook(url,message,files);$('discordStatus').textContent=t('discordSent');$('discordWebhook').value='';}
+    try{if($('attachPNG').checked)files.push({name:'R6-flamingo-strat-'+snapshot.map.id+'.png',blob:await pngBlob()});if($('attachJSON').checked)files.push({name:'R6-flamingo-strat-plan-'+snapshot.map.id+'.json',blob:new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'})});await window.BreachAdvanced.sendWebhook(url,message,files);$('discordStatus').textContent=t('discordSent');$('discordWebhook').value='';}
     catch(error){$('discordStatus').textContent=t(error.code||'discordFailed');}finally{discordBusy=false;$('sendDiscord').disabled=false;}
   }
   function reviewPlan(raw){
