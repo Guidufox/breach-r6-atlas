@@ -1,0 +1,67 @@
+BREACH — R6 ATLAS 1.3.0
+Extraia TODO o ZIP. Abra Abrir-Breach.bat ou index.html no Edge ou Chrome.
+Não precisa instalar dependências nem usar Internet. Mantenha a pasta maps.
+Escolha Português (BR), Español ou English no seletor no canto superior direito.
+
+Os nomes dos mapas seguem as listas da Ubisoft em português do Brasil e
+espanhol latino-americano. Os callouts vêm dos dicionários por mapa do R6Calls,
+uma referência da comunidade. Segmentos são separados por «·» e marcados ≈;
+selecione o ponto para ver equivalências e a fonte. Não são apresentados como
+catálogo oficial de nomes das salas. A referência em inglês é opcional.
+
+Busque em qualquer idioma, com ou sem acentos. Adicione aliases da equipe a
+pontos existentes ou crie callouts, rotas, desenhos e notas por andar.
+Ajuste o tamanho dos nomes em Camadas. Pratique só favoritos se quiser;
+pontos marcados para revisão voltam durante a sessão.
+
+Antes de atualizar, exporte um backup JSON no app anterior. Extraia este ZIP
+na mesma pasta, substituindo os arquivos do app, e abra novamente. Importe o
+backup se necessário. Favoritos, notas e desenhos da versão anterior são
+compatíveis. Os dados ficam neste navegador; trocar de navegador ou mover a
+pasta pode exigir importar o backup.
+
+Veja Fontes e nomes no app para as fontes, cobertura e limites do catálogo.
+
+NOVIDADES 1.2.0
+Seletor de bomb sites A/B, callouts próximos, notas por bomb site e desenhos
+vinculados ao site. Pares em andares diferentes são suportados. A numeração vem
+da fonte; não são inventados nomes oficiais de salas.
+Praticar > Encontre o callout: clique na localização documentada. Conta tentativas
+e acertos da sessão. Mostrar localização não conta como acerto.
+Compartilhe SVG, PNG, PDF e JSON do plano. PNG mostra uma prévia das notas;
+PDF/JSON mantêm o texto completo. Importe planos em outro PC. Desenhos de uma
+revisão diferente são arquivados para evitar posicionamento incorreto.
+Atualizações: execute Actualizar-Mapas.bat com Internet, escolha uma nova revisão,
+e importe o pacote .json.gz em Mapas. Revise antes de aplicar. Até três revisões
+anteriores são preservadas neste navegador, com restauração. Se o arquivo mudar,
+os desenhos antigos são arquivados; notas e favoritos são mantidos.
+Exporte seu backup e guarde os pacotes ao trocar de PC. Mapas exigem IndexedDB.
+Arquivos de publicação no GitHub Pages incluídos: veja PUBLICAR-WEB.md.
+Na web, o catálogo de atualizações é atualizado manualmente pelo proprietário.
+
+NOVIDADES 1.3.0 — OPÇÕES APROVADAS 16, 17, 21, 22, 24, 26
+Planejar > Notas: cinco jogadores com nome, tarefa, callout vinculado e estado.
+Selecione um bomb site para tarefas por site; sem site, são salvas por andar.
+O site continua selecionado ao seguir uma tarefa para outro andar.
+Checklist editável por bomb site, até 40 itens; reiniciar desmarca os itens.
+Mapas > Comparar: plantas anterior/atual por andar e contagem de callouts
+adicionados, removidos, renomeados, movidos e alterações nos marcadores A/B.
+Outras camadas e a geometria do mapa precisam de revisão visual.
+Histórico > Recuperar desenhos: escolha um desenho arquivado e o andar de destino,
+clique para deslocar o primeiro ponto, revise a prévia roxa, marque a posição
+como revisada e adicione. O arquivo original permanece intacto.
+Compartilhar > Discord: mensagem editável, PNG e JSON do plano. Copie e envie
+manualmente ou use o webhook do canal escolhido, com Internet. O webhook não
+é salvo nem incluído no backup. Sucesso exige confirmação do Discord; não há
+reenvio automático. Confira o canal antes de tentar novamente se o envio for
+incerto. Os anexos combinados têm limite de 8 MB. Restrições do navegador podem
+exigir envio manual.
+Compartilhar > Link ou código: informe a URL HTTPS da futura web publicada para
+criar um link, ou deixe em branco para gerar um código offline. Cole em Receber
+plano e revise antes de confirmar. A importação JSON também mostra uma prévia.
+Confirmar combina desenhos e substitui notas/tarefas/checklist daquele contexto;
+desenhos de outra revisão são arquivados. Planos grandes são compartilhados como
+JSON. Links/códigos contêm notas e tarefas, acessíveis a quem os receber.
+Tarefas e checklist entram no backup e JSON, têm prévia em PNG e texto completo
+em PDF. As melhorias anteriores permanecem. Publicação da web/domínio adiada.
+Compartilhar por webhook não cria um bot de Discord.

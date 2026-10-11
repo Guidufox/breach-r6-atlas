@@ -1,0 +1,197 @@
+BREACH — R6 ATLAS
+Versión 1.3.0 · Datos de R6Calls copiados el 11 de octubre de 2026
+
+ABRIR EN WINDOWS
+1. Extraé TODO el ZIP en una carpeta, por ejemplo Documentos\Breach.
+2. Abrí index.html con Edge o Chrome, o ejecutá Abrir-Breach.bat.
+   El lanzador abre el archivo HTML con el programa predeterminado de Windows.
+   Si se abre en un editor, hacé clic derecho en index.html > Abrir con > Edge.
+3. Opcional: ejecutá Crear-acceso-directo.vbs para crear un acceso en el escritorio.
+   Conservá la carpeta completa en el mismo lugar después de crearlo.
+
+EN MAC O LINUX
+Abrí index.html con Chrome, Edge o un navegador moderno compatible con SVG y WebP.
+
+No necesitás instalar Node, Python, Electron ni dependencias. No es un ejecutable
+.exe nativo: es una app portable que usa el navegador instalado en la PC.
+Todos los planos y datos están incluidos. No necesita conexión a Internet.
+
+QUÉ INCLUYE
+• Los 29 mapas disponibles en R6Calls y 2.943 etiquetas de callouts de la fuente.
+• Pisos, búsqueda de mapas y callouts, favoritos, zoom y desplazamiento.
+• Capas de bombas, área segura, rehén, cámaras, paredes destructibles,
+  trampillas, líneas de visión, túneles de drones, escaleras, claraboyas,
+  extintores, tuberías de gas, detectores de metal, fuentes de ruido,
+  puntos de aparición, nombres, brújula y leyenda (según el plano).
+• Selector English / Español / Português (Brasil): interfaz y etiquetas del plano.
+• Nombres de mapas contrastados con Ubisoft; callouts del diccionario de R6Calls.
+• Búsqueda en los 3 idiomas, sin distinguir tildes; referencias en inglés opcionales.
+• Ficha EN / ES / PT-BR, fuente de cada nombre y alias buscables de tu equipo.
+• Tamaño de los nombres ajustable en Capas; repaso solo de favoritos.
+• Los puntos marcados para repasar vuelven durante la sesión.
+• Callouts de tu equipo, rutas, dibujo libre y notas por mapa y piso.
+• Repaso con los nombres ocultos: reconocer el punto, revelar y autoevaluar.
+• Exportación de la vista a SVG, con capas y anotaciones visibles.
+• Respaldo JSON de favoritos, notas, dibujos, alias e idioma.
+• Compatibilidad con los respaldos de la versión anterior.
+
+Los 29 mapas son: Bank, Bartlett University, Border, Calypso Casino, Chalet,
+Close Quarters, Club House, Coastline, Consulate, District, Emerald Plains,
+Favela, Fortress, Hereford Base, House, Kafe Dostoyevsky, Kanal, Lair,
+Nighthaven Labs, Oregon, Outback, Presidential Plane, Skyscraper,
+Stadium Alpha, Stadium Bravo, Theme Park, Tower, Villa y Yacht.
+
+District no tiene etiquetas originales en la fuente; podés agregar tus callouts.
+Los números de los niveles mantienen la referencia de R6Calls: 1F = planta
+baja; 2F = piso 1; B = sótano; RF = nivel superior/azotea.
+
+ATAJOS
+/ Buscar mapa. Flechas arriba/abajo: cambiar piso.
+F: ajustar al piso. V: mover. P: agregar callout.
+L: ruta. D: dibujo libre. Ctrl+Z: borrar la última anotación del piso.
+Rueda del mouse: zoom. Arrastrar: mover o dibujar según la herramienta.
+
+GUARDADO
+Tus datos quedan en el almacenamiento local de ese navegador. Si borrás sus
+datos, cambiás de navegador o movés la carpeta, pueden no aparecer.
+Usá Respaldo > Exportar respaldo antes de mover o actualizar la app.
+La importación combina favoritos y dibujos; reemplaza las notas del mismo piso.
+El guardado es local. Solo se envían datos a Discord si pulsás Enviar
+con el webhook de un canal; no se requiere una cuenta para usar la app.
+
+ALCANCE Y FUENTE
+Es una app independiente para consulta y preparación manual. No detecta el
+mapa de la partida ni incorpora una superposición dentro del juego.
+Es una copia de los datos de la fuente en la fecha indicada. Nuevas revisiones
+del juego y callouts de equipos/pro players no se actualizan automáticamente.
+No todas las capas existen en todos los mapas o pisos.
+Los SVG mantienen geometría y coordenadas. Las imágenes incrustadas se
+recomprimieron a WebP para reducir el tamaño del paquete.
+
+CRÉDITOS
+Mapas, etiquetas y capas: https://www.r6calls.com/ — DudeKiller y colaboradores.
+Proyecto histórico: https://github.com/DudeKiller82/r6calls
+R6Maps original: Jon "Mr.Clark" Capa; mantenimiento: purechaose.
+Rainbow Six Siege y capturas del juego: Ubisoft.
+Incluimos la licencia MIT del proyecto histórico en LICENSE-R6MAPS.txt.
+Esta licencia histórica no constituye una atribución de licencia nueva para
+todos los contenidos de la web actual o para los materiales de Ubisoft.
+La interfaz y las herramientas de Breach se crearon para este paquete.
+
+Si al ejecutar el BAT solo aparece Edge, abrí index.html directamente:
+clic derecho > Abrir con > Microsoft Edge o Google Chrome.
+No ejecutes el BAT desde la vista del ZIP: usá clic derecho en el ZIP >
+Extraer todo, y abrí los archivos dentro de la carpeta extraída.
+El lanzador corregido comprueba que los archivos principales estén presentes.
+Si un mapa no abre, comprobá que hayas extraído la carpeta completa y que
+estén data.js, ui.js, app.js, features.js, advanced.js, style.css, vendor
+y la carpeta maps junto a index.html.
+
+ACTUALIZAR DESDE LA VERSIÓN ANTERIOR
+1. En la app anterior, Respaldo > Exportar respaldo.
+2. Cerrá la pestaña de Breach y extraé TODO este ZIP.
+3. Podés reemplazar los archivos de la carpeta anterior y conservar su ubicación.
+4. Abrí Abrir-Breach.bat o index.html. El selector de idioma está arriba a la derecha.
+5. Si no aparecen tus datos, Respaldo > Importar respaldo y elegí el JSON del paso 1.
+   Los favoritos conservan los mismos identificadores aunque cambie su nombre.
+
+CÓMO SE INVESTIGARON LOS NOMBRES
+Español: los mapas usan la variante latinoamericana publicada por Ubisoft.
+Portugués: los mapas usan la variante de Brasil publicada por Ubisoft.
+Por ejemplo House = Casa / Residência y Villa = Villa / Mansão.
+También se pueden buscar variantes de España como Territorio Remoto o Canal.
+Bartlett y District, ausentes de la lista actual de Ubisoft, usan R6Calls.
+
+Los callouts son referencias comunitarias de R6Calls por mapa, no un catálogo
+oficial de nombres de habitación de Ubisoft. No usamos traducción automática.
+Por cada idioma hay 2.890 etiquetas con entrada completa, 50 con segmentos
+ya documentados, 1 apodo Banana y 2 referencias «L» conservadas.
+Las etiquetas de segmentos llevan «·» y un indicador ≈. Seleccioná el punto:
+la ficha identifica la fuente y aclara cuando no es un nombre completo oficial.
+Son 2.943 etiquetas del plano; una ubicación puede aparecer en varios pisos.
+Banana se conserva como apodo; también podés buscar Plátano para encontrarlo.
+Los nombres pintados dentro de las imágenes no cambian: se localizan las
+etiquetas vectoriales y los puntos de aparición documentados de la fuente.
+No se agregaron apodos de pro players en posiciones inventadas. Usá los alias
+y los callouts personalizados para incorporar los que acuerden en tu equipo.
+
+Más información y enlaces: FUENTES-NOMBRES.txt o «Fuentes y nombres» en la app.
+
+NOVEDADES 1.2.0 — OPCIONES 2, 9, 11 Y 12
+• Sitios A/B: selector sobre el plano, énfasis en las bombas, callouts próximos
+  ordenados por distancia y notas por sitio. Los pares salen de los SVG originales.
+  Se usa el número de sitio de la fuente; no se inventan nombres oficiales.
+  Consulado incluye un sitio repartido entre planta baja y sótano.
+  Los dibujos nuevos quedan asociados al sitio seleccionado; los anteriores son generales.
+• Practicar > Encontrá el callout: leé el nombre y hacé clic donde está.
+  Acumula aciertos e intentos de la sesión. Arrastrar mueve el mapa sin responder.
+  Se acepta la cercanía al punto documentado, no una habitación completa inferida.
+  Mostrar ubicación revela la respuesta sin sumar acierto; Otro punto continúa.
+• Compartir: SVG, PNG, PDF o JSON de un plan. PNG incluye una vista previa de notas;
+  PDF y JSON conservan las notas completas. El JSON permite importar el plan,
+  sus capas y la vista en otra PC. Las notas de pines se incluyen en PDF/PNG.
+• Mapas: importar un paquete .json.gz, revisar el cambio y aplicar. Conserva
+  hasta tres revisiones anteriores por mapa en este navegador y permite restaurar.
+  Si el archivo de la fuente cambia, los dibujos se archivan para evitar desalinearlos.
+  Las notas y los favoritos se conservan. Los archivos de dibujos pueden descargarse
+  como JSON desde el historial y también están en el respaldo general.
+
+ACTUALIZADOR DE PC
+1. Con Internet, ejecutá Actualizar-Mapas.bat. Usa PowerShell incluido en Windows.
+2. Si R6Calls publicó una revisión nueva, escribí el ID del mapa de la lista.
+3. El paquete queda en Actualizaciones. No sobrescribe la app ni aplica el mapa.
+4. En la app abrí Mapas > Importar actualización, revisá y pulsá Aplicar.
+No se consulta Internet mientras usás los mapas offline. El actualizador se
+ejecuta manualmente. Los paquetes necesitan almacenamiento IndexedDB disponible
+en el navegador; si no se pueden guardar, la app mantiene la revisión instalada.
+Los paquetes de mapas no van dentro del respaldo de anotaciones: conservá también
+los .json.gz si cambiás de navegador o PC.
+
+VERSIÓN WEB
+Este mismo paquete contiene los archivos para GitHub Pages y herramientas de
+publicación. PUBLICAR-WEB.md explica el repositorio, Pages y el dominio.
+En la web, Buscar actualizaciones consulta el catálogo publicado junto a la app.
+El propietario actualiza ese catálogo ejecutando el flujo manual de GitHub.
+Los planes y las notas se guardan en cada navegador; no se suben a GitHub.
+
+NOVEDADES 1.3.0 — OPCIONES 16, 17, 21, 22, 24 Y 26
+16. Equipo: cinco jugadores con nombre, tarea, ubicación enlazada y estado listo.
+    En Planificar > Notas elegí un sitio A/B para guardar tareas de ese sitio.
+    Sin sitio, se guardan por piso. Ir a ubicación centra el callout elegido.
+    Podés asignar ubicaciones de otros pisos: el sitio sigue seleccionado al
+    moverte entre niveles, aunque sus bombas no estén en el nivel mostrado.
+17. Lista de preparación por sitio: agregá, editá, marcá y eliminá pasos.
+    Reiniciar desmarca los pasos para la próxima ronda. Máximo 40 por sitio.
+21. Mapas > Comparar: vista anterior/actual por piso y recuento de callouts
+    agregados, eliminados, renombrados, movidos y cambios de marcadores A/B.
+    La comparación está disponible en una actualización pendiente y en el
+    historial. Paredes, texturas y otras capas requieren revisión visual.
+    No certifica todos los cambios de jugabilidad de una actualización de R6.
+22. Historial > Recuperar dibujos: elegí un dibujo archivado y el piso destino.
+    Hacé clic para trasladar su primer punto; rutas y trazos conservan su forma.
+    También podés conservar coordenadas. Revisá el fantasma violeta, marcá
+    Posición revisada y recién entonces agregalo. El archivo original se conserva.
+    Terminar cancela la posición pendiente; los dibujos ya agregados permanecen.
+24. Compartir > Discord: mensaje editable con tareas/lista y descargas PNG/JSON.
+    Podés copiarlo y subir los archivos manualmente. Para enviar desde la app,
+    pegá el webhook de tu canal y elegí adjuntos. Requiere Internet.
+    El webhook se usa durante el envío y no se guarda ni entra en respaldos.
+    Solo se informa éxito cuando Discord confirma el mensaje. Si falla, revisá
+    el canal antes de reenviar; no hay reintentos automáticos. La app limita los
+    adjuntos combinados a 8 MB. Una restricción del navegador puede impedir el
+    envío directo; la copia y descarga manual siguen disponibles.
+26. Compartir > Enlace o código: con la URL HTTPS de la futura web publicada,
+    generá un enlace que contiene el plan. Sin URL, genera un código offline.
+    Pegá el código o enlace en Recibir plan y pulsá Vista previa. Un enlace abierto
+    en la futura web también muestra esa vista antes de importar. Confirmá para
+    combinar los dibujos y reemplazar notas/tareas/lista del mismo contexto.
+    Dibujos de una revisión distinta se archivan; no se colocan sin revisión.
+    El enlace/código contiene notas y tareas: quien lo recibe puede verlas.
+    Los planes grandes se comparten como JSON, también con vista previa.
+    El plan incluye dibujos del piso mostrado y los pines personalizados enlazados
+    desde tareas, aunque esos pines estén en otros pisos.
+
+Tareas y listas están en el respaldo general y en el JSON de plan; PNG muestra
+una vista previa y PDF conserva el texto completo. Se mantienen las mejoras de
+las versiones anteriores. La web y el dominio todavía no están publicados.
+El envío por webhook no incorpora un bot ni comandos de Discord.
