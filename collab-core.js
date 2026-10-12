@@ -46,7 +46,7 @@
     if (collection === 'actions') {
       if (parts.length !== 3 || scope !== map || !/^[\w.:-]{1,100}$/.test(id)) return false;
       if (value === null) return true;
-      return value && value.id === id && ['pin','line','pen'].includes(value.kind) && Number.isInteger(value.floor) && value.floor >= -1 && value.floor <= 6 && /^#[a-f\d]{6}$/i.test(value.color) && Array.isArray(value.points) && value.points.length > 0 && value.points.length <= 10000 && value.points.every(p=>Array.isArray(p)&&p.length===2&&p.every(n=>Number.isFinite(n)&&Math.abs(n)<1e6)) && (value.label === undefined || typeof value.label === 'string' && value.label.length <= 60) && (value.note === undefined || typeof value.note === 'string' && value.note.length <= 300) && (value.site === undefined || typeof value.site === 'string' && /^\d{1,2}$/.test(value.site));
+      return value && value.id === id && ['pin','line','pen'].includes(value.kind) && Number.isInteger(value.floor) && value.floor >= -1 && value.floor <= 6 && /^#[a-f\d]{6}$/i.test(value.color) && Array.isArray(value.points) && value.points.length > 0 && value.points.length <= 10000 && value.points.every(p=>Array.isArray(p)&&p.length===2&&p.every(n=>Number.isFinite(n)&&Math.abs(n)<1e6)) && (value.label === undefined || typeof value.label === 'string' && value.label.length <= 60) && (value.note === undefined || typeof value.note === 'string' && value.note.length <= 300) && (value.operator === undefined || typeof value.operator === 'string' && /^[a-z][a-z0-9-]{0,40}$/.test(value.operator)) && (value.site === undefined || typeof value.site === 'string' && /^\d{1,2}$/.test(value.site));
     }
     if (!scope.startsWith(map+':')) return false;
     const suffix=scope.slice(map.length+1);

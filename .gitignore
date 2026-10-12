@@ -5,9 +5,6 @@ node_modules
 .env
 .env.*
 !.env.example
-Invitar-Bot.txt
 *.log
 __pycache__/
 *.zip
-discord-bot/assets/images/
-discord-bot/map-source/

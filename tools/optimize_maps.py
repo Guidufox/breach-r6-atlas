@@ -32,6 +32,8 @@ def optimize(source, target):
 
 if __name__ == '__main__':
     root = Path(__file__).resolve().parents[1]
+    if not json.loads((root/'content-policy.json').read_text()).get('mapsEnabled',True):
+        print('Maps publication disabled; raster optimization skipped');raise SystemExit(0)
     reports = optimize(root/'maps', root/'_site/maps')
     (root/'_site/map-performance.json').write_text(json.dumps(reports, indent=2), encoding='utf-8')
     before = sum(x['beforeGzip'] for x in reports)

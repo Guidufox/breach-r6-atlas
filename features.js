@@ -129,11 +129,11 @@
   function makePDF(jpeg,title,subtitle,layers,notes,t){
     const pdf=new window.jspdf.jsPDF({orientation:'landscape',unit:'pt',format:'a4',compress:true});
     const w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
-    pdf.setProperties({title:'Breach — '+title,author:'Breach R6 Atlas',subject:subtitle});pdf.setTextColor(24,32,38);pdf.setFontSize(19);pdf.text(title,30,34);pdf.setFontSize(10);pdf.text(subtitle,30,52);
+    pdf.setProperties({title:'Flamingo/Strat — '+title,author:'Guidufox — community project',subject:subtitle});pdf.setTextColor(24,32,38);pdf.setFontSize(19);pdf.text(title,30,34);pdf.setFontSize(10);pdf.text(subtitle,30,52);
     const mapH=Math.min(h-140,(w-60)*1125/2000);pdf.addImage(jpeg,'JPEG',30,66,w-60,mapH,undefined,'FAST');pdf.setFontSize(8);pdf.setTextColor(70,85,95);
     const legend=pdf.splitTextToSize(t('legendTitle')+': '+layers.join(' · '),w-60);pdf.text(legend.slice(0,3),30,h-61);
     if(notes.trim()){pdf.text(t('notesContinued'),30,h-24);pdf.setFontSize(10);const lines=pdf.splitTextToSize(notes,w-70),perPage=Math.floor((h-100)/13);for(let i=0;i<lines.length;i+=perPage){pdf.addPage();pdf.setTextColor(24,32,38);pdf.setFontSize(16);pdf.text(title+' — '+t('notes'),35,34);pdf.setFontSize(10);pdf.text(lines.slice(i,i+perPage),35,65,{lineHeightFactor:1.3});}}
-    pdf.setFontSize(8);for(let p=1;p<=pdf.getNumberOfPages();p++){pdf.setPage(p);pdf.setTextColor(100,115,125);pdf.text('Breach · R6Calls / Ubisoft · '+p+'/'+pdf.getNumberOfPages(),w-30,h-10,{align:'right'});}
+    pdf.setFontSize(8);for(let p=1;p<=pdf.getNumberOfPages();p++){pdf.setPage(p);pdf.setTextColor(100,115,125);pdf.text('Flamingo/Strat · Community / not affiliated · R6Calls / Ubisoft · '+p+'/'+pdf.getNumberOfPages(),w-30,h-10,{align:'right'});}
     return pdf.output('arraybuffer');
   }
   function makePNG(mapCanvas,title,subtitle,layers,notes,t){

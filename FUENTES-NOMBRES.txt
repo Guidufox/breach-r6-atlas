@@ -48,7 +48,7 @@ con el HUD de todas las versiones regionales del juego. La app muestra fuentes
 y equivalencias, sin atribuirlas a Ubisoft como nombres oficiales de habitación.
 Cambios futuros del juego no se actualizan automáticamente.
 Textos que forman parte de imágenes del plano no se pueden cambiar de idioma.
-Datos locales de cada equipo y alias personalizados no se envían a servidores.
+Los datos personales no se envían automáticamente. En salas por invitación se comparte la táctica del mapa elegido mediante HTTPS durante un máximo de dos horas; el webhook envía solo por acción explícita. Ver docs/PRIVACY.md.
 
 SITIOS A/B Y ACTUALIZACIONES (1.2.0)
 Se usan los grupos bomb-<n>A/B y sus coordenadas en los SVG de R6Calls.

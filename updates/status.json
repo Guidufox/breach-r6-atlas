@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-10-11T23:32:41.758411+00:00",
+  "lastSuccess": "2026-10-11T23:32:41.758411+00:00",
+  "sourceStatus": "ok",
+  "source": "https://www.r6calls.com/data/dataMap.json",
+  "pending": [],
+  "reviewOwner": "Guidufox",
+  "scope": "Version metadata only; not a certification of map geometry, callout correctness or gameplay changes."
+}
