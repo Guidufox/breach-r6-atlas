@@ -29,6 +29,7 @@ La publicación comprime solo fondos raster WebP, sin cambiar dimensiones, etiqu
 
 - [Privacidad](docs/PRIVACY.md), [derechos y contacto](docs/RIGHTS.md), [retirada de contenido](docs/TAKEDOWN.md).
 - [Publicación](PUBLICAR-WEB.md), [revisión de temporadas](docs/MAINTENANCE.md), [SEO y métricas](docs/SEO.md).
+- [Lanzamiento público: verificación y textos preparados](LANZAMIENTO.md).
 - [English quick guide](docs/README-en.md), [guia em português](docs/README-pt-BR.md).
 - Contacto público: https://github.com/Guidufox/breach-r6-atlas/issues/new.
 

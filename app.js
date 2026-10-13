@@ -330,7 +330,12 @@
   }
   function addAction(a){if(selectedSite)a.site=selectedSite.id;actionList().push(a);save();renderAnnotations();renderNotes();renderCalls();}
   function removeAction(id){config.actions[map.id]=actionList().filter(a=>a.id!==id);save();renderAnnotations();renderNotes();renderCalls();}
-  function setPanel(next){panel=next;['calls','layers','notes'].forEach(id=>$(id+'Panel').hidden=id!==next);document.querySelectorAll('[data-tab]').forEach(b=>{b.classList.toggle('active',b.dataset.tab===next);b.setAttribute('aria-selected',b.dataset.tab===next);});}
+  function setPanel(next){
+    const focusedPanel=document.activeElement?.closest('.detail-panel');panel=next;
+    ['calls','layers','notes'].forEach(id=>$(id+'Panel').hidden=id!==next);
+    document.querySelectorAll('[data-tab]').forEach(b=>{const active=b.dataset.tab===next;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});
+    if(focusedPanel?.id!==undefined&&focusedPanel.id!==next+'Panel')$(next+'Tab').focus({preventScroll:true});
+  }
   function renderCallControls(){
     const studying=mode==='study';
     $('callBrowseControls').hidden=studying;$('studyOptions').hidden=!studying;
@@ -462,7 +467,11 @@
   $('allMaps').onclick=()=>{favoriteMapsOnly=false;$('allMaps').classList.add('active');$('favoriteMaps').classList.remove('active');renderMaps();};
   $('favoriteMaps').onclick=()=>{favoriteMapsOnly=true;$('allMaps').classList.remove('active');$('favoriteMaps').classList.add('active');renderMaps();};
   $('favoriteMapBtn').onclick=()=>{config.favoriteMaps=config.favoriteMaps.includes(map.id)?config.favoriteMaps.filter(id=>id!==map.id):[...config.favoriteMaps,map.id];save();renderMaps();renderHeader();};
-  document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>setPanel(b.dataset.tab));
+  const detailTabs=[...document.querySelectorAll('[data-tab]')];
+  detailTabs.forEach((b,i)=>{b.onclick=()=>setPanel(b.dataset.tab);b.onkeydown=e=>{
+    const next=e.key==='ArrowRight'?detailTabs[(i+1)%detailTabs.length]:e.key==='ArrowLeft'?detailTabs[(i+detailTabs.length-1)%detailTabs.length]:e.key==='Home'?detailTabs[0]:e.key==='End'?detailTabs.at(-1):null;
+    if(next){e.preventDefault();setPanel(next.dataset.tab);next.focus();}
+  };});
   document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>setTool(b.dataset.tool));
   document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{if(b.dataset.mode!==mode)setMode(b.dataset.mode);else setPanel(mode==='plan'?'notes':'calls');});
   $('restartStudy').onclick=()=>setMode('study');
@@ -541,7 +550,7 @@
     $('shareBase').value=config.shareBase||(/^https:/.test(location.href)?location.href.split('#')[0].split('?')[0]:'');$('planLinkOutput').value='';$('linkStatus').textContent='';$('discordStatus').textContent='';$('discordMessage').value=discordText();$('shareDialog').showModal();
   }
   function generateLink(){try{const base=$('shareBase').value.trim();$('planLinkOutput').value=window.BreachAdvanced.planLink(planPacket(),base);config.shareBase=base;save();$('linkStatus').textContent=base?'':t('localCode');}catch(error){$('linkStatus').textContent=t(error.code||'badShareURL');}}
-  function discordText(){const notes=[preparationText(),config.notes[noteKey()]||'',selectedSite?config.siteNotes[map.id+':'+selectedSite.id]||'':''].filter(Boolean).join('\n\n');return ('R6- flamingo/strat · '+scopeCaption()+' · '+floorName(floor)+' · r'+map.revision+'\n\n'+notes).slice(0,1850);}
+  function discordText(){const notes=[preparationText(),config.notes[noteKey()]||'',selectedSite?config.siteNotes[map.id+':'+selectedSite.id]||'':''].filter(Boolean).join('\n\n');return ('R6- flamingo/strat · '+scopeCaption()+(selectedSite?' · '+floorName(floor):'')+' · r'+map.revision+'\n\n'+notes).slice(0,1850);}
   async function sendDiscord(){
     if(discordBusy)return;let url;try{url=window.BreachAdvanced.webhookURL($('discordWebhook').value.trim()).href;}catch{ $('discordStatus').textContent=t('badWebhook');return;}
     const message=$('discordMessage').value.trim();if(!message){$('discordStatus').textContent=t('discordIntro');return;}
