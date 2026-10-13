@@ -4,6 +4,7 @@ from pathlib import Path
 from PIL import Image
 
 IMAGE = re.compile(r'data:image/(?:webp|png|jpeg);base64,([A-Za-z0-9+/=]+)')
+RASTER_QUALITY = 80  # Text and callouts remain vector; only embedded backgrounds change.
 
 def optimize(source, target):
     reports = []
@@ -16,8 +17,11 @@ def optimize(source, target):
             nonlocal images
             raw = base64.b64decode(match[1])
             with Image.open(io.BytesIO(raw)) as image:
+                # Keep small emblems and pictograms sharp; most transfer cost is in floor imagery.
+                if max(image.size) < 512:
+                    return match[0]
                 output = io.BytesIO()
-                image.save(output, 'WEBP', quality=85, method=4)
+                image.save(output, 'WEBP', quality=RASTER_QUALITY, method=4)
             packed = output.getvalue()
             if len(packed) >= len(raw) * .95:
                 return match[0]

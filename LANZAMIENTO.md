@@ -12,7 +12,7 @@ La web ya está publicada. Esta guía separa la comprobación técnica de la dec
 | Sitio, HTTPS y despliegue desde `main` | Listo | Cada cambio pasa por pruebas, construcción y `release_check.py` en GitHub Actions. |
 | Interfaz ES, EN y PT-BR | Disponible | Repasar modos, exportación, paneles y mensajes en un móvil real y en los navegadores que use el público. |
 | Salas de cinco personas | Disponible | Dependen del servicio HTTPS separado; las invitaciones caducan a las dos horas. |
-| Rendimiento móvil | Mejorado, pendiente de prueba amplia | Los mapas se cargan al pedirlos. Una conexión móvil lenta puede tardar varios segundos en abrir un plano grande. |
+| Rendimiento móvil | Mejorado, pendiente de prueba amplia | Los mapas se cargan al pedirlos. La compresión del paquete publicado pasó de 36,97 a 20,18 MB en los 29 archivos de planos (gzip local, 13 oct. 2026); Banco pasó de 761 a 567 KB. Una conexión móvil lenta aún puede tardar varios segundos en abrir un plano grande. |
 | Uso de material ajeno | **Pendiente** | La solicitud a R6Calls no tiene respuesta confirmada. Revisar por separado los derechos de planos, imágenes, emblemas y marca con sus titulares. Ver `docs/RIGHTS.md` y `docs/PERMISSION-REQUEST.md`. |
 
 La licencia MIT del código propio y el aviso de no afiliación **no** conceden derechos sobre recursos ajenos. Antes de promoverlo masivamente, registrar por escrito el alcance de los permisos o sustituir los recursos cuyo uso no esté autorizado. No cambiar `permissionStatus` en `content-policy.json` solo para pasar una comprobación.
