@@ -61,7 +61,7 @@
     for(const [data,attr] of [['placeholder','placeholder'],['title','title'],['label','aria-label']])document.querySelectorAll('[data-'+data+']').forEach(e=>e.setAttribute(attr,t(e.dataset[data])));
     $('languageSelect').value=config.language;$('bilingual').checked=config.bilingual;$('studyFavorites').checked=config.studyFavorites;
     $('labelSize').value=config.labelSize;$('labelSizeValue').textContent=config.labelSize+'%';$('namesLanguage').textContent=languageCode();
-    $('practiceKind').value=config.studyKind;$('practiceKind').parentElement.hidden=mode!=='study';
+    $('practiceKind').value=config.studyKind;renderCallControls();
     renderMapNames();renderMaps();renderHeader();renderFloors();renderSites();renderLayers();renderNotes();renderCalls();renderStudyText();
     if(recovery){const target=recovery.target,reviewed=$('reviewPosition').checked;renderRecovery();recovery.target=target;$('reviewPosition').checked=reviewed;$('commitRecovery').disabled=!reviewed;renderRecoveryGhost();}
     if(comparison&&$('compareDialog').open)renderComparison();
@@ -331,6 +331,13 @@
   function addAction(a){if(selectedSite)a.site=selectedSite.id;actionList().push(a);save();renderAnnotations();renderNotes();renderCalls();}
   function removeAction(id){config.actions[map.id]=actionList().filter(a=>a.id!==id);save();renderAnnotations();renderNotes();renderCalls();}
   function setPanel(next){panel=next;['calls','layers','notes'].forEach(id=>$(id+'Panel').hidden=id!==next);document.querySelectorAll('[data-tab]').forEach(b=>{b.classList.toggle('active',b.dataset.tab===next);b.setAttribute('aria-selected',b.dataset.tab===next);});}
+  function renderCallControls(){
+    const studying=mode==='study';
+    $('callBrowseControls').hidden=studying;$('studyOptions').hidden=!studying;
+    for(const [id,key] of [['callsHeading',studying?'studyPanelTitle':'callsTitle'],['callsIntro',studying?'studyPanelIntro':'callsIntro'],['callsFoot',studying?'studyPanelFoot':'callFoot']]){
+      $(id).dataset.i18n=key;$(id).textContent=t(key);
+    }
+  }
   function setTool(next){
     if(next==='operator'&&!operatorId){ensureOperatorModule().then(()=>window.R6Operators.open()).catch(()=>toast(t('operatorFailed')));return;}
     if(mode==='study'||recovery)return;
@@ -342,7 +349,7 @@
     if(recovery)endRecovery();mode=next;selected=null;selectionLayer?.replaceChildren();$('selectedTag').hidden=true;
     document.querySelectorAll('[data-mode]').forEach(b=>{b.classList.toggle('active',b.dataset.mode===next);b.setAttribute('aria-pressed',b.dataset.mode===next);});
     $('tools').hidden=next==='study';$('studyPrompt').hidden=next!=='study';
-    $('practiceKind').parentElement.hidden=next!=='study';$('callSearch').disabled=next==='study';$('allFloors').disabled=next==='study';$('starredCalls').disabled=next==='study';
+    renderCallControls();
     if(next==='study'){tool='move';setPanel('calls');studyTarget=null;studyLast=null;sessionKnown=0;sessionAgain=0;reviewQueue=[];challenge={attempts:0,correct:0,resolved:false};applyVisibility();nextStudy();$('modeHint').textContent=t(config.studyKind==='locate'?'challengeHint':'hintStudy');}
     else{setTool('move');applyVisibility();if(next==='plan')setPanel('notes');renderCalls();}
   }
@@ -457,7 +464,8 @@
   $('favoriteMapBtn').onclick=()=>{config.favoriteMaps=config.favoriteMaps.includes(map.id)?config.favoriteMaps.filter(id=>id!==map.id):[...config.favoriteMaps,map.id];save();renderMaps();renderHeader();};
   document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>setPanel(b.dataset.tab));
   document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>setTool(b.dataset.tool));
-  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{if(b.dataset.mode!==mode)setMode(b.dataset.mode);else setPanel(mode==='plan'?'notes':'calls');});
+  $('restartStudy').onclick=()=>setMode('study');
   document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{
     const preset=b.dataset.preset;for(const id of Object.keys(layers))config.layers[id]=preset==='all'||(preset==='calls'?['txt','cmp','ip'].includes(id):!['sec','hst','lg','losw','losf'].includes(id));
     document.querySelectorAll('[data-preset]').forEach(p=>p.classList.toggle('active',p===b));applyVisibility();renderLayers();save();
@@ -596,7 +604,7 @@
   $('checkForm').onsubmit=e=>{e.preventDefault();if(!selectedSite)return;const text=$('checkText').value.trim();if(!text)return;if(checklist().length>=40){toast(t('checkLimit'));return;}checklist().push({id:crypto.randomUUID(),text:text.slice(0,300),done:false});$('checkText').value='';save();renderChecklist();};
   $('resetCheck').onclick=()=>{checklist().forEach(item=>item.done=false);save();renderChecklist();};
   $('makeLink').onclick=generateLink;$('copyLink').onclick=()=>copyField('planLinkOutput');$('previewReceived').onclick=reviewReceived;$('confirmPlan').onclick=acceptPlan;
-  $('prepareMessage').onclick=()=>{$('discordMessage').value=discordText();};$('copyMessage').onclick=()=>copyField('discordMessage');$('discordPNG').onclick=()=>exportRaster('png');$('sendDiscord').onclick=sendDiscord;$('shareDialog').addEventListener('close',()=>{$('discordWebhook').value='';});
+  $('prepareMessage').onclick=()=>{$('discordMessage').value=discordText();};$('copyMessage').onclick=()=>copyField('discordMessage');$('sendDiscord').onclick=sendDiscord;
   $('compareUpdate').onclick=pendingComparison;$('compareFloor').onchange=renderComparison;
   $('recoverItem').onchange=()=>{if(!recovery)return;recovery.current=remainingRecovery().find(a=>a.id===$('recoverItem').value);if(recovery.current)renderRecovery();};
   $('recoverFloor').onchange=()=>{if(recovery)changeFloor(Number($('recoverFloor').value));};$('keepPosition').onclick=()=>{if(recovery)placeRecovery({x:recovery.current.points[0][0],y:recovery.current.points[0][1]});};$('reviewPosition').onchange=()=>{$('commitRecovery').disabled=!recovery||!$('reviewPosition').checked;};$('commitRecovery').onclick=commitRecovery;$('finishRecovery').onclick=endRecovery;
