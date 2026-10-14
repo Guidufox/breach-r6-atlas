@@ -20,7 +20,7 @@ La licencia MIT del código propio y el aviso de no afiliación **no** conceden 
 ## Comprobación en un solo recorrido
 
 1. En el repositorio local, ejecutar `node --test tests/*.test.cjs`.
-2. Ejecutar `python3 tools/build_site.py` y `python3 tools/optimize_maps.py` (requiere Pillow, instalado por el workflow), y después `python3 tools/release_check.py`. Este control comprueba las páginas generadas, enlaces internos, mapas y guías esperados y el hash del script en línea de la política de contenido.
+2. Ejecutar `python3 tools/build_site.py` y `python3 tools/optimize_maps.py` (requiere Pillow, instalado por el workflow), y después `python3 tools/release_check.py`. Este control comprueba las páginas generadas, enlaces internos, mapas y guías esperados, el orden de la política de contenido, su hash de script en línea y que los SVG publicados no incluyan código activo ni referencias externas.
 3. Ejecutar `python3 tools/release_check.py --public`. El código 2 indica que la difusión pública sigue pendiente de una revisión de permisos; el código 1 indica un fallo técnico. Un resultado favorable de este script tampoco sustituye la revisión humana de todos los derechos de terceros.
 4. En un teléfono real, probar: abrir un mapa por primera vez con datos móviles, cerrar y abrir ambos paneles, cambiar idioma, buscar, repasar, dibujar, exportar PNG y descargar un respaldo. Repetir el recorrido principal en Chrome o Edge, Firefox y Safari cuando se disponga de esos dispositivos.
 5. Probar una sala con dos cuentas o dispositivos de confianza: crear, unirse por invitación, editar elementos diferentes, descargar el plan y salir. No usar una táctica privada como prueba pública.

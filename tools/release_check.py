@@ -14,10 +14,45 @@ import json
 from pathlib import Path
 import re
 from urllib.parse import unquote, urlsplit
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "_site"
 PROJECT_PATH = "/breach-r6-atlas/"
+SVG_ACTIVE_TAGS = {"script", "foreignObject", "iframe", "object", "embed", "style", "audio", "video"}
+SVG_INTERNAL_URL = re.compile(r"url\(\s*['\"]?#[^)\s'\"]+['\"]?\s*\)", re.I)
+
+
+def check_svg_assets(map_ids: list[str]) -> list[str]:
+    """Reject executable or remote content in SVG strings inserted into the DOM."""
+    failures: list[str] = []
+    for map_id in map_ids:
+        path = SITE / "maps" / f"{map_id}.js"
+        if not path.is_file():
+            continue
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8").split("=", 1)[1].rstrip(";\n"))
+            svg = ET.fromstring(raw)
+            if svg.tag.split("}")[-1] != "svg":
+                raise ValueError("La raíz no es SVG")
+            for node in svg.iter():
+                tag = node.tag.split("}")[-1]
+                if tag in SVG_ACTIVE_TAGS:
+                    raise ValueError(f"Elemento activo: {tag}")
+                for attribute, value in node.attrib.items():
+                    name = attribute.split("}")[-1].lower()
+                    if name.startswith("on"):
+                        raise ValueError(f"Manejador de eventos: {name}")
+                    if name in ("href", "src") and not (value.startswith("#") or value.startswith(("data:image/png;base64,", "data:image/jpeg;base64,", "data:image/webp;base64,"))):
+                        raise ValueError(f"Referencia externa o no admitida: {name}")
+                    if name in ("href", "src"):
+                        continue  # Approved image data can contain arbitrary base64 characters.
+                    without_local_urls = SVG_INTERNAL_URL.sub("", value)
+                    if re.search(r"(?:url\s*\(|@import|javascript\s*:|https?\s*:|//)", without_local_urls, re.I):
+                        raise ValueError(f"URL externa o código en {name}")
+        except (OSError, ValueError, ET.ParseError, IndexError, TypeError) as error:
+            failures.append(f"SVG no seguro o inválido: {map_id}: {error}")
+    return failures
 
 
 class Page(HTMLParser):
@@ -46,8 +81,14 @@ def check() -> list[str]:
     policy = json.loads((ROOT / "content-policy.json").read_text(encoding="utf-8"))
     pages = list(SITE.rglob("*.html"))
     for file in pages:
+        source = file.read_text(encoding="utf-8")
         parser = Page()
-        parser.feed(file.read_text(encoding="utf-8"))
+        parser.feed(source)
+        policy_at = source.find('<meta http-equiv="Content-Security-Policy"')
+        if policy_at < 0 or policy_at > source.find("</head>"):
+            failures.append(f"Falta CSP en head: {file.relative_to(SITE)}")
+        elif re.search(r"<(?:script|link\b[^>]*rel=['\"]?stylesheet)", source[:policy_at], re.I):
+            failures.append(f"La CSP se aplica tarde: {file.relative_to(SITE)}")
         for identifier in parser.repeated:
             failures.append(f"ID repetido: {file.relative_to(SITE)} #{identifier}")
         for asset in parser.assets:
@@ -100,6 +141,7 @@ def check() -> list[str]:
             for name in (f"maps/{map_id}.js", f"maps/{map_id}.labels.js", f"mapas/{map_id}/index.html"):
                 if not (SITE / name).is_file():
                     failures.append(f"Falta mapa o guía: {name}")
+        failures.extend(check_svg_assets(map_ids))
         print(f"Mapas y guías comprobados: {len(map_ids)}")
     print(f"Páginas HTML comprobadas: {len(pages)}")
     return failures
