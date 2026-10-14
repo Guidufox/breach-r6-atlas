@@ -31,13 +31,15 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
       assert.ok(size.zoomVisible,'Zoom controls must be available');
       const start=await zoomValue(page);await page.locator('#zoomIn').click();assert.ok(await zoomValue(page)>start,'Zoom button enlarges the map');
       const session=await context.newCDPSession(page),x=size.stage.x+size.stage.width/2,y=size.stage.y+size.stage.height*.43;
+      await page.evaluate(()=>{window.mobileEvents=[];for(const name of ['pointerdown','pointermove','pointerup','pointercancel'])document.querySelector('#mapStage').addEventListener(name,e=>window.mobileEvents.push([name,e.pointerId,e.pointerType,Math.round(e.clientX),Math.round(e.clientY)]),true);});
       const before=await zoomValue(page);
       await touch(session,'touchStart',[[x-30,y],[x+30,y]]);
       await touch(session,'touchMove',[[x-65,y],[x+65,y]]);
       assert.ok(await zoomValue(page)>before,`Pinch must enlarge at ${viewport.width}px`);
       const previous=await page.locator('#mapHost svg').getAttribute('viewBox');
       await touch(session,'touchMove',[[x-45,y+25],[x+85,y+25]]);
-      assert.notEqual(await page.locator('#mapHost svg').getAttribute('viewBox'),previous,'Two-finger movement must pan');
+      const panned=await page.locator('#mapHost svg').getAttribute('viewBox');
+      assert.notEqual(panned,previous,`Two-finger movement must pan; events: ${JSON.stringify(await page.evaluate(()=>window.mobileEvents))}`);
       await touch(session,'touchEnd',[]);
       if(viewport.width===390){
         assert.equal(await page.locator('#operatorSettingsBtn').count(),0);
