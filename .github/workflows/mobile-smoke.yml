@@ -2,6 +2,26 @@ name: Probar interfaz móvil
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "app.js"
+      - "style.css"
+      - "index.html"
+      - "data.js"
+      - "sw.js"
+      - "tests/mobile-browser.cjs"
+      - ".github/workflows/mobile-smoke.yml"
+  pull_request:
+    paths:
+      - "app.js"
+      - "style.css"
+      - "index.html"
+      - "data.js"
+      - "sw.js"
+      - "tests/mobile-browser.cjs"
+      - ".github/workflows/mobile-smoke.yml"
 
 permissions:
   contents: read
