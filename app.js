@@ -490,6 +490,7 @@
   $('clearFloorBtn').onclick=()=>{const current=floorActions();if(!current.length)return;const ids=new Set(current.map(a=>a.id));config.actions[map.id]=actionList().filter(a=>!ids.has(a.id));save();renderAnnotations();renderNotes();renderCalls();toast(t('floorCleared'));};
   $('zoomIn').onclick=()=>zoom(.8);$('zoomOut').onclick=()=>zoom(1.25);$('fitBtn').onclick=fitFloor;$('contextBtn').onclick=()=>updateView(defaultView.slice());
   $('fullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('mapStage').requestFullscreen();}catch{toast(t('fullscreenError'));}};
+  document.addEventListener('fullscreenchange',()=>{if(svg)fitFloor();});
   $('exportViewBtn').onclick=openShare;$('exportSVG').onclick=exportView;$('exportPNG').onclick=()=>exportRaster('png');$('exportPDF').onclick=()=>exportRaster('pdf');$('exportPlan').onclick=exportPlan;$('importPlan').onchange=importPlan;
   $('siteSelect').onchange=()=>chooseSite($('siteSelect').value);$('siteNotes').oninput=()=>{if(selectedSite){config.siteNotes[map.id+':'+selectedSite.id]=$('siteNotes').value;save();}};
   $('practiceKind').onchange=()=>{config.studyKind=$('practiceKind').value==='locate'?'locate':'recognize';save();setMode('study');};

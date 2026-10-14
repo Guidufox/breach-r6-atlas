@@ -55,7 +55,18 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
         assert.ok(Math.abs(Number(await badge.getAttribute('cx'))-old)>3,'One-finger operator drag must move it');
         await page.reload();await badge.waitFor();assert.ok(Math.abs(Number(await badge.getAttribute('cx'))-old)>3,'Drag must persist after reload');
       }
-      console.log(`Mobile ${viewport.width}x${viewport.height}: layout, buttons, pinch and pan OK`);
+      await page.locator('#fullscreenBtn').click();
+      await page.waitForFunction(()=>document.fullscreenElement?.id==='mapStage');
+      const full=await page.evaluate(()=>{
+        const stage=document.querySelector('#mapStage').getBoundingClientRect(),map=document.querySelector('#mapHost svg [id$="-pic"]:not([display="none"])')?.getBoundingClientRect();
+        const tools=document.querySelector('.canvas-tools').getBoundingClientRect(),zoom=document.querySelector('.zoom-tools').getBoundingClientRect();
+        return {stage:stage.toJSON(),map:map?.toJSON(),tools:tools.toJSON(),zoom:zoom.toJSON()};
+      });
+      assert.ok(full.stage.height>=viewport.height-2,`Fullscreen stage must fill ${viewport.height}px: ${JSON.stringify(full)}`);
+      assert.ok(full.map&&Math.abs((full.map.top+full.map.bottom)/2-(full.stage.top+full.stage.bottom)/2)<full.stage.height*.16,`Fullscreen map must be centered: ${JSON.stringify(full)}`);
+      assert.ok(full.tools.bottom+8<=full.zoom.top,`Fullscreen controls must not overlap: ${JSON.stringify(full)}`);
+      await page.locator('#fullscreenBtn').click();await page.waitForFunction(()=>!document.fullscreenElement);
+      console.log(`Mobile ${viewport.width}x${viewport.height}: layout, buttons, pinch, pan and fullscreen OK`);
       await context.close();
     }
   }finally{await browser.close();server.close();}
