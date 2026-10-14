@@ -9,7 +9,7 @@ No está afiliada, patrocinada ni aprobada por Ubisoft ni por R6Calls. Las marca
 ## Uso
 
 - PC: abrir Abrir-Breach.bat o index.html con todos los archivos de la app juntos. Los mapas incluidos funcionan offline.
-- Web: elegir mapa, piso, sitio e idioma (ES, EN o PT-BR). Los paneles se abren y cierran de forma independiente, con preferencias separadas para PC y móvil.
+- Web: elegir mapa, piso, sitio e idioma (ES, EN o PT-BR). El botón del sol/luna cambia entre interfaz clara y oscura y recuerda la elección. Cada panel lateral tiene un único control visible para abrirlo o cerrarlo; la disposición se recuerda por separado en PC y móvil.
 - Dibujos: pines, rutas y trazos; deshacer, notas, tareas para cinco jugadores y checklist por sitio. Emblemas de operadores disponibles bajo demanda, sin retratos. Se pueden asociar a nuevas rutas y exportar con la táctica.
 - Estudio: reconocimiento y ubicación de callouts, favoritos y referencia en inglés. Los nombres comunitarios tienen procedencia documentada; no se anuncian como nombres oficiales del HUD.
 - Exportaciones: SVG, PNG, PDF y planes JSON. Importaciones con validación y vista previa de planes antes de incorporarlos. Exportar un respaldo antes de mover trabajo a otro PC o navegador.
@@ -23,7 +23,7 @@ El trabajo personal queda separado y se restaura al salir. Una sala dura hasta d
 
 ## Rendimiento
 
-La publicación comprime solo fondos raster WebP, sin cambiar dimensiones, etiquetas, geometría ni marcas tácticas del SVG. El ensayo inicial redujo 26,3% los bytes gzip de planos; no equivale a una garantía de tiempo de carga. Las etiquetas se cargan por mapa. Emblemas y exportador PDF se descargan cuando se necesitan. Los originales se conservan en maps/ para el portable y los paquetes de actualización.
+La publicación comprime solo fondos raster WebP, sin cambiar dimensiones, etiquetas, geometría ni marcas tácticas del SVG. La compilación de octubre redujo 45,4% los bytes gzip frente a los planos originales; no equivale a una garantía de tiempo de carga. Las etiquetas se cargan por mapa. Emblemas y exportador PDF se descargan cuando se necesitan. Los originales se conservan en maps/ para el portable y los paquetes de actualización.
 
 ## Documentación y mantenimiento
 

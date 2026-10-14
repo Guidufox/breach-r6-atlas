@@ -6,14 +6,14 @@
 <meta name="description" content="Herramienta comunitaria para estudiar callouts y mapas de Rainbow Six Siege en español, inglés y portugués y preparar tácticas con tu equipo.">
 <link rel="canonical" href="https://guidufox.github.io/breach-r6-atlas/">
 <meta property="og:type" content="website"><meta property="og:title" content="Flamingo/Strat · Mapas y tácticas de R6"><meta property="og:description" content="Aprendé callouts y prepará rutas, operadores y tareas con tu equipo. Proyecto comunitario no afiliado a Ubisoft."><meta property="og:url" content="https://guidufox.github.io/breach-r6-atlas/"><meta property="og:image" content="https://guidufox.github.io/breach-r6-atlas/social-card.png"><meta name="twitter:card" content="summary_large_image">
-<meta name="color-scheme" content="dark"><title>R6- flamingo/strat</title>
-<link rel="icon" href="r6-logo.png" type="image/png"><link rel="stylesheet" href="style.css?v=ui-20261013">
+<meta name="color-scheme" content="light dark"><title>R6- flamingo/strat</title>
+<script src="theme.js?v=1"></script><link rel="icon" href="r6-logo.png" type="image/png"><link rel="stylesheet" href="style.css?v=theme-1"><link rel="stylesheet" href="theme.css?v=1">
 </head>
 <body>
 <header class="topbar">
   <a class="brand" href="#" aria-label="R6- flamingo/strat"><img class="brand-logo" src="r6-logo.png" alt="Rainbow Six Siege" width="42" height="42"><span>R6- flamingo/strat<small>MAPS · CALLOUTS · STRATEGIES</small></span></a>
   <nav class="modes"><button data-mode="explore" data-i18n="explore" class="active">Explorar</button><button data-mode="plan" data-i18n="plan">Estrategias</button><button data-mode="study" data-i18n="study">Repasar</button></nav>
-  <div class="header-actions"><select id="languageSelect" data-label="language" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option><option value="pt-br">Português (BR)</option></select><button id="teamRoomBtn" class="quiet" data-i18n="roomButton">Equipo · 5</button><span class="offline" data-title="localModeHint"><i></i><span data-i18n="localMode">LOCAL</span></span><button id="updatesBtn" class="quiet" data-i18n="updates">Actualizaciones de mapas</button><button id="backupBtn" class="quiet" data-i18n="backup">Respaldo</button><button id="helpBtn" class="round" data-label="help">?</button></div>
+  <div class="header-actions"><select id="languageSelect" data-label="language" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option><option value="pt-br">Português (BR)</option></select><button id="themeToggle" class="round" type="button"></button><button id="teamRoomBtn" class="quiet" data-i18n="roomButton">Equipo · 5</button><span class="offline" data-title="localModeHint"><i></i><span data-i18n="localMode">LOCAL</span></span><button id="updatesBtn" class="quiet" data-i18n="updates">Actualizaciones de mapas</button><button id="backupBtn" class="quiet" data-i18n="backup">Respaldo</button><button id="helpBtn" class="round" data-label="help">?</button></div>
 </header>
 <section class="intro-strip"><p data-trust="intro">Estudiá mapas y callouts en español, inglés y portugués; dibujá rutas y prepará tareas para tu equipo.</p><a href="mapas/" data-trust="guides">Guías de callouts</a><button id="dataFreshness" class="tiny" hidden></button></section>
 <main class="workspace">

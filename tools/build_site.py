@@ -4,7 +4,7 @@ import shutil
 root=Path(__file__).resolve().parents[1];out=root/'_site'
 if out.exists():shutil.rmtree(out)
 out.mkdir()
-for name in ['index.html','app.js','panels.js','collab-launcher.js','collab.js','collab-core.js','validation.js','operators.js','operators-data.js','trust.js','metrics.js','metrics-dashboard.js','metricas.html','social-card.png','content-policy.json','data.js','ui.js','features.js','advanced.js','style.css','icon.svg','icon.ico','r6-logo.png','LICENSE-R6MAPS.txt','FUENTES-NOMBRES.txt','CNAME']:
+for name in ['index.html','app.js','panels.js','theme.js','theme.css','collab-launcher.js','collab.js','collab-core.js','validation.js','operators.js','operators-data.js','trust.js','metrics.js','metrics-dashboard.js','metricas.html','social-card.png','content-policy.json','data.js','ui.js','features.js','advanced.js','style.css','icon.svg','icon.ico','r6-logo.png','LICENSE-R6MAPS.txt','FUENTES-NOMBRES.txt','CNAME']:
     file=root/name
     if file.is_file():shutil.copy2(file,out/name)
 import json

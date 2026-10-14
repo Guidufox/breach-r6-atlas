@@ -128,7 +128,7 @@ def check() -> list[str]:
             if "'sha256-" + base64.b64encode(digest).decode() + "'" not in scripts:
                 failures.append("Un script en línea no coincide con su hash CSP.")
 
-    expected = ["index.html", "style.css", "app.js", "ui.js", "robots.txt", "sitemap.xml", "legal.html"]
+    expected = ["index.html", "style.css", "theme.css", "theme.js", "app.js", "ui.js", "robots.txt", "sitemap.xml", "legal.html"]
     for name in expected:
         if not (SITE / name).is_file():
             failures.append(f"Falta recurso público: {name}")
