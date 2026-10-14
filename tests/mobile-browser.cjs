@@ -36,8 +36,10 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
       await touch(session,'touchStart',[[x-30,y],[x+30,y]]);
       await touch(session,'touchMove',[[x-65,y],[x+65,y]]);
       assert.ok(await zoomValue(page)>before,`Pinch must enlarge at ${viewport.width}px`);
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>resolve())));
       const previous=await page.locator('#mapHost svg').getAttribute('viewBox');
       await touch(session,'touchMove',[[x-45,y+25],[x+85,y+25]]);
+      await page.waitForFunction(()=>window.mobileEvents.filter(e=>e[0]==='pointermove').length>=4);
       const panned=await page.locator('#mapHost svg').getAttribute('viewBox');
       assert.notEqual(panned,previous,`Two-finger movement must pan; events: ${JSON.stringify(await page.evaluate(()=>window.mobileEvents))}`);
       await touch(session,'touchEnd',[]);
