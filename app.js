@@ -44,6 +44,7 @@
   let challenge={attempts:0,correct:0,resolved:false};
   let roomPersonal=null,roomMap=null,roomApplying=false;
   let operatorId='',operatorNote='',operatorRoutes=true,operatorLoader,pdfLoader;
+  let fullscreenView=null,fullscreenFrame=0;
   const labelLoads=new Map();
   function loadAssetScript(src){return new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=src;script.onload=resolve;script.onerror=reject;document.head.append(script);});}
   function ensureMapLabels(target){if(!DATA.lazyLabels||target.labels.length||target.labelsLoaded)return Promise.resolve();if(!labelLoads.has(target.id))labelLoads.set(target.id,loadAssetScript('maps/'+target.id+'.labels.js?v=labels-1').then(()=>{target.labels=window.R6_LABELS[target.id]||[];target.labelsLoaded=true;labelLoads.delete(target.id);}).catch(error=>{labelLoads.delete(target.id);throw error;}));return labelLoads.get(target.id);}
@@ -489,8 +490,13 @@
   $('undoBtn').onclick=()=>{const last=floorActions().at(-1);if(last)removeAction(last.id);};
   $('clearFloorBtn').onclick=()=>{const current=floorActions();if(!current.length)return;const ids=new Set(current.map(a=>a.id));config.actions[map.id]=actionList().filter(a=>!ids.has(a.id));save();renderAnnotations();renderNotes();renderCalls();toast(t('floorCleared'));};
   $('zoomIn').onclick=()=>zoom(.8);$('zoomOut').onclick=()=>zoom(1.25);$('fitBtn').onclick=fitFloor;$('contextBtn').onclick=()=>updateView(defaultView.slice());
-  $('fullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('mapStage').requestFullscreen();}catch{toast(t('fullscreenError'));}};
-  document.addEventListener('fullscreenchange',()=>{if(svg)fitFloor();});
+  function fitFullscreenAfterResize(){
+    cancelAnimationFrame(fullscreenFrame);
+    fullscreenFrame=requestAnimationFrame(()=>{fullscreenFrame=requestAnimationFrame(()=>{if(svg&&document.fullscreenElement===$('mapStage'))fitFloor();});});
+  }
+  $('fullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else{fullscreenView=view?.slice()||null;await $('mapStage').requestFullscreen();}}catch{fullscreenView=null;toast(t('fullscreenError'));}};
+  document.addEventListener('fullscreenchange',()=>{if(document.fullscreenElement===$('mapStage'))fitFullscreenAfterResize();else if(svg&&fullscreenView){updateView(fullscreenView);fullscreenView=null;}});
+  screen.orientation?.addEventListener?.('change',()=>{if(document.fullscreenElement===$('mapStage'))fitFullscreenAfterResize();});
   $('exportViewBtn').onclick=openShare;$('exportSVG').onclick=exportView;$('exportPNG').onclick=()=>exportRaster('png');$('exportPDF').onclick=()=>exportRaster('pdf');$('exportPlan').onclick=exportPlan;$('importPlan').onchange=importPlan;
   $('siteSelect').onchange=()=>chooseSite($('siteSelect').value);$('siteNotes').oninput=()=>{if(selectedSite){config.siteNotes[map.id+':'+selectedSite.id]=$('siteNotes').value;save();}};
   $('practiceKind').onchange=()=>{config.studyKind=$('practiceKind').value==='locate'?'locate':'recognize';save();setMode('study');};
