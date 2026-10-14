@@ -36,6 +36,7 @@
   let floor = map.floors.includes(config.floor) ? config.floor : (map.floors.includes(1)?1:map.floors[0]);
   let svg, overlay, selectionLayer, siteLayer, defaultView, view, mode='explore', tool='move', panel='calls';
   let selected=null, favoritesOnly=false, favoriteMapsOnly=false, loadSequence=0, pointer=null, pendingPin=null;
+  const activeTouches=new Map();let pinch=null;
   let studyTarget=null, studyLast=null, sessionKnown=0, sessionAgain=0, toastTimer, reviewQueue=[];
   let labelAnchors=new Map();
   let bombAnchors=new Map(),selectedSite=null,pendingUpdate=null,updateBusy=false;
@@ -231,7 +232,8 @@
     if(pic){try{const b=bounds(pic);if(b.width>0){const pad=Math.max(b.width,b.height)*.09;updateView([b.x-pad,b.y-pad,b.width+pad*2,b.height+pad*2]);return;}}catch{}}
     updateView(defaultView.slice());
   }
-  function pointFromEvent(e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse());}
+  function pointFromClient(x,y){const p=svg.createSVGPoint();p.x=x;p.y=y;return p.matrixTransform(svg.getScreenCTM().inverse());}
+  function pointFromEvent(e){return pointFromClient(e.clientX,e.clientY);}
   function zoom(factor,point){
     if(!svg)return;const nextWidth=view[2]*factor;
     if(nextWidth<defaultView[2]/18 || nextWidth>defaultView[2]*2)return;
@@ -624,25 +626,60 @@
   $('planPreviewDialog').addEventListener('close',()=>{receivedPlan=null;});
   window.addEventListener('hashchange',receiveHash);
   const stage=$('mapStage');
+  function touchPair(){const [a,b]=[...activeTouches.values()];return {mid:{x:(a.x+b.x)/2,y:(a.y+b.y)/2},distance:Math.hypot(a.x-b.x,a.y-b.y)};}
+  function beginPinch(){
+    if(!svg||activeTouches.size!==2)return;
+    const pair=touchPair();
+    if(pointer?.action&&pointer.originalPoints){pointer.action.points=pointer.originalPoints;renderAnnotations();}
+    pointer?.preview?.remove();pointer=null;
+    pinch={ids:[...activeTouches.keys()],distance:Math.max(8,pair.distance),view:view.slice(),anchor:pointFromClient(pair.mid.x,pair.mid.y)};
+  }
+  function movePinch(){
+    if(!pinch||!pinch.ids.every(id=>activeTouches.has(id)))return;
+    const pair=touchPair(),width=window.BreachAdvanced.pinchWidth(pinch.view[2],pinch.distance,pair.distance,defaultView[2]);
+    const factor=width/pinch.view[2],candidate=[pinch.view[0],pinch.view[1],width,pinch.view[3]*factor];
+    updateView(candidate);
+    const underFinger=pointFromClient(pair.mid.x,pair.mid.y);
+    updateView([candidate[0]+pinch.anchor.x-underFinger.x,candidate[1]+pinch.anchor.y-underFinger.y,width,candidate[3]]);
+  }
+  function finishTouch(id){
+    activeTouches.delete(id);
+    if(!pinch)return false;
+    if(pinch.ids.every(pointerId=>activeTouches.has(pointerId)))return true;
+    pinch=null;
+    const [remaining]=[...activeTouches.entries()];
+    if(remaining){const [pointerId,client]=remaining,p=pointFromClient(client.x,client.y);pointer={id:pointerId,start:p,startClient:[client.x,client.y],startTarget:stage,view:view.slice(),moved:true,gesturePan:true,points:[[p.x,p.y]]};}
+    return true;
+  }
   stage.addEventListener('wheel',e=>{if(!svg)return;e.preventDefault();zoom(e.deltaY>0?1.1:1/1.1,pointFromEvent(e));},{passive:false});
   stage.addEventListener('pointerdown',e=>{
     if(!svg||e.button!==0||e.target.closest('button,input,select,textarea,.canvas-tools,.zoom-tools,.study-prompt,.recovery-bar'))return;
+    if(e.pointerType==='touch'){
+      if(activeTouches.size>=2)return;
+      activeTouches.set(e.pointerId,{x:e.clientX,y:e.clientY});stage.setPointerCapture(e.pointerId);
+      if(activeTouches.size===2){beginPinch();return;}
+      if(pinch)return;
+    }
     const p=pointFromEvent(e),handle=mode!=='study'&&!recovery?e.target.closest('[data-operator-handle]'):null;
     const action=handle?floorActions().find(a=>a.id===handle.closest('[data-action]')?.getAttribute('data-action')):null;
     pointer={id:e.pointerId,start:p,startClient:[e.clientX,e.clientY],startTarget:e.target,view:view.slice(),moved:false,points:[[p.x,p.y]],action,originalPoints:action?action.points.map(q=>q.slice()):null};stage.setPointerCapture(e.pointerId);
     if(tool!=='move'&&tool!=='pin'&&tool!=='operator')pointer.preview=node('polyline',{points:p.x+','+p.y,fill:'none',stroke:$('drawColor').value,'stroke-width':1.3,'stroke-linecap':'round','stroke-linejoin':'round'},overlay);
   });
   stage.addEventListener('pointermove',e=>{
+    if(e.pointerType==='touch'&&activeTouches.has(e.pointerId))activeTouches.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pinch){movePinch();return;}
     if(!pointer||pointer.id!==e.pointerId)return;
     if(Math.hypot(e.clientX-pointer.startClient[0],e.clientY-pointer.startClient[1])>4)pointer.moved=true;
     if(pointer.action){
       if(pointer.moved){const p=pointFromEvent(e),dx=p.x-pointer.start.x,dy=p.y-pointer.start.y;pointer.action.points=pointer.originalPoints.map(([x,y])=>[x+dx,y+dy]);renderAnnotations();}
-    }else if(tool==='move'){
+    }else if(pointer.gesturePan||tool==='move'){
       const ctm=svg.getScreenCTM().inverse(),start=svg.createSVGPoint(),now=svg.createSVGPoint();start.x=pointer.startClient[0];start.y=pointer.startClient[1];now.x=e.clientX;now.y=e.clientY;const a=start.matrixTransform(ctm),b=now.matrixTransform(ctm);updateView([pointer.view[0]-(b.x-a.x),pointer.view[1]-(b.y-a.y),pointer.view[2],pointer.view[3]]);
     }else if(pointer.preview){const p=pointFromEvent(e);if(tool==='line')pointer.points=[pointer.points[0],[p.x,p.y]];else if(Math.hypot(p.x-pointer.points.at(-1)[0],p.y-pointer.points.at(-1)[1])>.3)pointer.points.push([p.x,p.y]);pointer.preview.setAttribute('points',pointer.points.map(q=>q.join(',')).join(' '));}
   });
   stage.addEventListener('pointerup',e=>{
+    if(e.pointerType==='touch'&&finishTouch(e.pointerId))return;
     if(!pointer||pointer.id!==e.pointerId)return;const current=pointer;pointer=null;current.preview?.remove();
+    if(current.gesturePan)return;
     if(current.action&&current.moved){save();renderAnnotations();renderNotes();renderCalls();}
     else if(current.action){if(current.action.kind==='pin')selectCall({id:current.action.id,name:current.action.label,floor:current.action.floor,custom:true,action:current.action});}
     else if(recovery&&!current.moved&&tool==='move')placeRecovery(current.start);
@@ -660,7 +697,7 @@
       setTimeout(()=>stage.removeEventListener('click',suppress,true),0);
     }
   });
-  stage.addEventListener('pointercancel',()=>{if(pointer?.action&&pointer.originalPoints){pointer.action.points=pointer.originalPoints;renderAnnotations();}pointer?.preview?.remove();pointer=null;});
+  stage.addEventListener('pointercancel',e=>{if(e.pointerType==='touch'&&finishTouch(e.pointerId))return;if(pointer?.action&&pointer.originalPoints){pointer.action.points=pointer.originalPoints;renderAnnotations();}pointer?.preview?.remove();pointer=null;});
   document.addEventListener('keydown',e=>{
     if(e.target.matches('input,textarea,select')||document.querySelector('dialog[open]'))return;
     if(e.key==='/'){e.preventDefault();$('mapSearch').focus();}

@@ -17,6 +17,12 @@ const advanced=window.BreachAdvanced;
 test('share plan round-trip keeps operator and notes without executing content',()=>{const raw={app:'breach-strategy',version:1,map:{id:'bank'},floor:1,data:{actions:{bank:[action]},notes:{'bank:1':'<script>bad()</script>'}}};assert.deepEqual(JSON.parse(JSON.stringify(advanced.decodePlan(advanced.encodePlan(raw)))),raw);});
 test('share decoder rejects invalid codes and bounded gzip bombs',()=>{for(const input of ['javascript:alert(1)','breach:v1:%%%','https://site.test/#plan=bad'])assert.throws(()=>advanced.decodePlan(input));const packed=fflate.gzipSync(new TextEncoder().encode('a'.repeat(2*1024*1024+1)));const code='breach:v1:'+Buffer.from(packed).toString('base64url');assert.throws(()=>advanced.decodePlan(code));});
 test('published URLs reject userinfo and executable protocols',()=>{for(const input of ['javascript:alert(1)','http://site.test','https://user:password@site.test'])assert.throws(()=>advanced.publicURL(input));assert.equal(advanced.publicURL('https://site.test/?x=1#secret').href,'https://site.test/');});
+test('pinch zoom follows finger distance and stops at existing map limits',()=>{
+  assert.equal(advanced.pinchWidth(600,100,200,1000),300);
+  assert.equal(advanced.pinchWidth(600,100,50,1000),1200);
+  assert.equal(advanced.pinchWidth(600,100,10000,1000),1000/18);
+  assert.equal(advanced.pinchWidth(600,100,1,1000),2000);
+});
 const review=require('../validation.js').reviewPlan;
 const bank=DATA.maps.find(m=>m.id==='bank');
 const plan=()=>({app:'breach-strategy',version:1,map:{id:bank.id,revision:bank.revision,sourceSha256:bank.sourceSha256},floor:1,data:{notes:{'bank:1':'allowed','club:1':'must not replace another map'},actions:{bank:[action]}}});
