@@ -18,7 +18,7 @@ if not policy.get('operatorsEnabled',True):
 if not policy.get('brandEnabled',True):(out/'r6-logo.png').unlink(missing_ok=True)
 if not policy.get('mapsEnabled',True):shutil.rmtree(out/'updates',ignore_errors=True)
 if not policy.get('operatorsEnabled',True):
-    text=(out/'index.html').read_text().replace('data-tool="operator"','hidden data-tool="operator"').replace('id="operatorSettingsBtn"','hidden id="operatorSettingsBtn"');(out/'index.html').write_text(text)
+    text=(out/'index.html').read_text().replace('data-tool="operator"','hidden data-tool="operator"');(out/'index.html').write_text(text)
 (out/'.nojekyll').touch()
 print('Public assets ready:',sum(1 for p in out.rglob('*') if p.is_file()))
 
