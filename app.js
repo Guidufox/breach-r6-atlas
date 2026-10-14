@@ -308,16 +308,16 @@
         if(mode!=='study'){const t=node('text',{x:x+(a.operator?7:5),y:y+1.5,fill:a.color,'font-size':4.5,'font-family':'Segoe UI, sans-serif','font-weight':600,'paint-order':'stroke','stroke':'#101820','stroke-width':.9},g);t.textContent=a.label;}
         g.style.cursor='pointer';g.onclick=()=>{if(!recovery&&tool==='move'&&mode!=='study')selectCall({id:a.id,name:a.label,floor:a.floor,custom:true,action:a});};
       }else{
-        if(a.operator&&/^[a-z][a-z0-9-]{0,40}$/.test(a.operator))operatorBadge(a.operator,a.points[0][0],a.points[0][1],g);
         node('polyline',{points:a.points.map(p=>p.join(',')).join(' '),fill:'none',stroke:a.color,'stroke-width':1.3,'stroke-linecap':'round','stroke-linejoin':'round'},g);
         if(a.kind==='line'&&a.points.length>1){const p=a.points.at(-1),prev=a.points.at(-2),angle=Math.atan2(p[1]-prev[1],p[0]-prev[0]);const points=[p,[p[0]-5*Math.cos(angle-.48),p[1]-5*Math.sin(angle-.48)],[p[0]-5*Math.cos(angle+.48),p[1]-5*Math.sin(angle+.48)]];node('polygon',{points:points.map(q=>q.join(',')).join(' '),fill:a.color},g);}
+        if(a.operator&&/^[a-z][a-z0-9-]{0,40}$/.test(a.operator))operatorBadge(a.operator,a.points[0][0],a.points[0][1],g);
       }
     }
   }
   function operatorBadge(id,x,y,parent){
     const source=window.R6_OPERATOR_IMAGES?.[id];
     if(typeof source==='string'&&source.startsWith('data:image/webp;base64,')){
-      node('circle',{cx:x,cy:y,r:7,fill:'transparent','pointer-events':'all','data-operator-handle':'',cursor:'grab'},parent);
+      node('circle',{cx:x,cy:y,r:18,fill:'transparent','pointer-events':'all','data-operator-handle':'',cursor:'grab'},parent);
       node('image',{x:x-5,y:y-5,width:10,height:10,href:source,'data-operator':id,'pointer-events':'none'},parent);
     }
     else{ensureOperatorModule().then(()=>window.R6Operators.asset(id)).catch(()=>{});}
