@@ -17,6 +17,8 @@ La aplicación se publica para aprendizaje y planificación de equipos, sin anun
 
 Antes de aceptar donaciones, publicidad o cualquier otra monetización: contactar primero a DudeKiller, tal como solicita su respuesta, y resolver por separado los derechos del material de Ubisoft y de terceros, o sustituirlo por recursos originales con derechos claros. No se interpreta la autorización de R6Calls como extensible a Ubisoft. Revisar las condiciones de cada plataforma y el contenido original propio. Las políticas de vídeos de Ubisoft no se toman como una licencia general de redistribución de una app de mapas.
 
+El enlace a Ko-fi facilitado por el responsable (`https://ko-fi.com/guidufox`) está preparado en el código, pero `donationsEnabled` permanece desactivado: el paquete público no contiene ese enlace mientras no se aclare por escrito la condición no comercial y el uso de los fondos de los mapas.
+
 ## Nombre
 
 Se mantiene el nombre elegido R6- flamingo/strat, indicando claramente que es comunitario y con emblema propio. R6 y Rainbow Six se usan para identificar el juego; no se afirma que ello elimine cualquier riesgo de marca. Cambiar el nombre visible por Flamingo/Strat sigue siendo una decisión del responsable.

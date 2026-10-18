@@ -71,8 +71,25 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
       assert.ok(full.map&&Math.abs((full.map.top+full.map.bottom)/2-(full.stage.top+full.stage.bottom)/2)<full.stage.height*.16,`Fullscreen map must be centered: ${JSON.stringify(full)}`);
       assert.ok(full.tools.bottom+8<=full.zoom.top,`Fullscreen controls must not overlap: ${JSON.stringify(full)}`);
       assert.ok(full.tools.width<full.stage.width-20,`Fullscreen drawing tools must stay compact: ${JSON.stringify(full)}`);
+      assert.ok(await page.locator('#fullscreenMapSelect').isVisible(),'Fullscreen map selector must be visible');
+      assert.ok(await page.locator('#fullscreenFloorSelect').isVisible(),'Fullscreen floor selector must be visible');
+      const nav=await page.locator('.fullscreen-navigator').boundingBox();
+      assert.ok(nav.x>=0&&nav.x+nav.width<=viewport.width+1,`Fullscreen selector must fit the mobile width: ${JSON.stringify(nav)}`);
       await page.locator('#fullscreenBtn').click();await page.waitForFunction(()=>!document.fullscreenElement);
       assert.equal(await page.locator('#mapHost svg').getAttribute('viewBox'),beforeFullscreen,'Leaving fullscreen must restore the previous view');
+      if(viewport.width===390){
+        await page.locator('#fullscreenBtn').click();await page.waitForFunction(()=>document.fullscreenElement?.id==='mapStage');
+        await page.locator('#fullscreenMapSelect').selectOption('chalet');
+        await page.waitForFunction(()=>document.querySelector('#mapTitle')?.textContent==='Chalet'&&document.querySelector('#mapHost svg')?.getAttribute('aria-label')==='Chalet');
+        assert.equal(await page.evaluate(()=>document.fullscreenElement?.id),'mapStage','Switching maps must preserve fullscreen');
+        await page.locator('#fullscreenFloorSelect').selectOption('0');
+        assert.match(await page.locator('#canvasLabel').innerText(),/\/ B$/,'The floor selector must change the visible floor');
+        await page.locator('#fullscreenBtn').click();await page.waitForFunction(()=>!document.fullscreenElement);
+        await page.waitForFunction(()=>{
+          const stage=document.querySelector('#mapStage').getBoundingClientRect(),picture=document.querySelector('#mapHost svg [id="0-pic"]')?.getBoundingClientRect();
+          return picture&&Math.abs((picture.top+picture.bottom)/2-(stage.top+stage.bottom)/2)<stage.height*.16;
+        });
+      }
       console.log(`Mobile ${viewport.width}x${viewport.height}: layout, buttons, pinch, pan and fullscreen OK`);
       await context.close();
     }

@@ -109,6 +109,8 @@ def check() -> list[str]:
                 failures.append(f"Enlace roto: {file.relative_to(SITE)} → {asset}")
 
     html = (SITE / "index.html").read_text(encoding="utf-8")
+    if policy.get("donationsEnabled", False) != ("https://ko-fi.com/guidufox" in html):
+        failures.append("El enlace de Ko-fi no coincide con el estado de autorización en content-policy.json.")
     if (SITE / "r6-logo.png").exists() or "r6-logo.png" in html:
         failures.append("El emblema anterior del juego sigue en la distribución pública.")
     if (SITE / "assets" / "operators").exists():

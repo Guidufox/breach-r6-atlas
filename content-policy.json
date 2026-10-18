@@ -5,5 +5,6 @@
   "reviewOwner": "Guidufox",
   "permissionStatus": "Confirmed written reply shared by project owner: R6Calls-authored content only; non-commercial; third-party rights excluded",
   "permissionRequestURL": "https://github.com/Guidufox/breach-r6-atlas/issues/1",
-  "brandEnabled": true
+  "brandEnabled": true,
+  "donationsEnabled": false
 }

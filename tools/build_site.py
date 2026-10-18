@@ -9,6 +9,11 @@ for name in ['index.html','app.js','panels.js','theme.js','theme.css','collab-la
     if file.is_file():shutil.copy2(file,out/name)
 import json
 policy=json.loads((root/'content-policy.json').read_text())
+donation_link='<a data-donation-link hidden href="https://ko-fi.com/guidufox" target="_blank" rel="noopener noreferrer">Ko-fi · Guidufox</a>'
+html=(out/'index.html').read_text(encoding='utf-8')
+if donation_link not in html:raise ValueError('Falta el enlace de Ko-fi preparado en index.html')
+html=html.replace(donation_link,donation_link.replace('data-donation-link hidden','data-donation-link') if policy.get('donationsEnabled',False) else '')
+(out/'index.html').write_text(html,encoding='utf-8')
 for name in ['maps','vendor','updates']:
     if name=='maps' and not policy.get('mapsEnabled',True):continue
     shutil.copytree(root/name,out/name)
