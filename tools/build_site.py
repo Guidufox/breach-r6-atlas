@@ -4,7 +4,7 @@ import shutil
 root=Path(__file__).resolve().parents[1];out=root/'_site'
 if out.exists():shutil.rmtree(out)
 out.mkdir()
-for name in ['index.html','app.js','panels.js','theme.js','theme.css','collab-launcher.js','collab.js','collab-core.js','validation.js','operators.js','operators-data.js','trust.js','metrics.js','metrics-dashboard.js','metricas.html','social-card.png','content-policy.json','data.js','ui.js','features.js','advanced.js','style.css','icon.svg','icon.ico','r6-logo.png','LICENSE-R6MAPS.txt','FUENTES-NOMBRES.txt','CNAME']:
+for name in ['index.html','app.js','panels.js','theme.js','theme.css','collab-launcher.js','collab.js','collab-core.js','validation.js','operators.js','operators-data.js','trust.js','metrics.js','metrics-dashboard.js','metricas.html','social-card.png','content-policy.json','data.js','ui.js','features.js','advanced.js','style.css','icon.svg','icon.ico','LICENSE-R6MAPS.txt','FUENTES-NOMBRES.txt','CNAME']:
     file=root/name
     if file.is_file():shutil.copy2(file,out/name)
 import json
@@ -15,7 +15,6 @@ for name in ['maps','vendor','updates','assets']:
     shutil.copytree(root/name,out/name)
 if not policy.get('operatorsEnabled',True):
     for name in ['operators.js','operators-data.js']:(out/name).unlink(missing_ok=True)
-if not policy.get('brandEnabled',True):(out/'r6-logo.png').unlink(missing_ok=True)
 if not policy.get('mapsEnabled',True):shutil.rmtree(out/'updates',ignore_errors=True)
 if not policy.get('operatorsEnabled',True):
     text=(out/'index.html').read_text().replace('data-tool="operator"','hidden data-tool="operator"');(out/'index.html').write_text(text)

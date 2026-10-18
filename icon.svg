@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="26" fill="#f5cf55"/><path d="M44 22h39L64 50h16l12 13v29L78 108H47L31 93V53zm8 47v19h18V69z" fill="#101316"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Flamingo/Strat">
+  <rect width="128" height="128" rx="26" fill="#f5cf55"/>
+  <path d="M78 20c-18 0-30 12-30 30 0 10 4 18 11 24-7 9-19 10-28 3l-8 13c18 15 42 11 54-7 6-9 5-20-3-27-5-4-7-9-7-15 0-6 4-10 11-10 5 0 8 3 10 7l13-8c-5-7-12-10-23-10Z" fill="#10171c"/>
+  <path d="m95 39 17 8-20 4-10-7Z" fill="#10171c"/>
+  <circle cx="81" cy="31" r="2.5" fill="#f5cf55"/>
+  <path d="M59 83v25m13-27-5 27m-14 0h13m-5 0h13" fill="none" stroke="#10171c" stroke-width="5" stroke-linecap="round"/>
+</svg>

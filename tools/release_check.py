@@ -109,6 +109,10 @@ def check() -> list[str]:
                 failures.append(f"Enlace roto: {file.relative_to(SITE)} → {asset}")
 
     html = (SITE / "index.html").read_text(encoding="utf-8")
+    if (SITE / "r6-logo.png").exists() or "r6-logo.png" in html:
+        failures.append("El emblema anterior del juego sigue en la distribución pública.")
+    if 'href="https://www.r6calls.com/"' not in html:
+        failures.append("Falta el enlace de crédito visible a R6Calls.")
     translations = json.loads((SITE / "ui.js").read_text(encoding="utf-8").split("=", 1)[1].rstrip(";\n"))
     keys = set(re.findall(r'data-(?:i18n|placeholder|title|label)="([^"]+)"', html))
     for language in ("es", "en", "pt-br"):

@@ -1,5 +1,8 @@
 BREACH 1.2.0 — INVESTIGACIÓN DE NOMBRES
 Fecha de consulta: 11/10/2026. Copia offline de los datos de R6Calls.
+VERSIÓN MODIFICADA: Flamingo/Strat añade equivalencias por idioma, alias
+documentados, correcciones de visualización y optimización de imágenes;
+no es una copia idéntica de los mapas y callouts originales de R6Calls.
 
 MAPAS: FUENTE DEL PUBLICADOR
 https://www.ubisoft.com/es-mx/game/rainbow-six/siege/game-info/maps

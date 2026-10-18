@@ -7,19 +7,19 @@ Contacto público elegido por el responsable: https://github.com/Guidufox/breach
 ## Licencias separadas
 
 - El código original de esta aplicación y su documentación original se distribuyen bajo MIT, en LICENSE.
-- Mapas, gráficos, callouts, traducciones de callouts y datos derivados de R6Calls no se relicencian como código propio. Se conserva LICENSE-R6MAPS.txt (licencia MIT de Jon Capa, 2016, publicada en el repositorio de origen) y FUENTES-NOMBRES.txt. La licencia del repositorio de origen no se interpreta aquí como autorización comercial sobre imágenes, marcas o contenido de terceros que el mantenedor no pueda licenciar.
-- assets/operators/ y r6-logo.png son material de sus respectivos titulares. El registro assets/operators/sources.json identifica las fuentes oficiales. No quedan incluidos en la licencia MIT del código de la app. No se afirma haber obtenido un permiso comercial de Ubisoft o de terceros.
+- Mapas, gráficos, callouts, traducciones de callouts y datos derivados de R6Calls no se relicencian como código propio. Se conserva LICENSE-R6MAPS.txt (licencia MIT de Jon Capa, 2016, publicada en el repositorio de origen) y FUENTES-NOMBRES.txt. El mantenedor DudeKiller confirmó por escrito al responsable el permiso para el código y los datos que él creó, bajo las condiciones de conservar aviso MIT, dar crédito visible, identificar modificaciones y mantener el proyecto no comercial. La respuesta no cubre material de Ubisoft ni de terceros.
+- `assets/operators/` contiene emblemas de sus respectivos titulares; `assets/operators/sources.json` identifica fuentes oficiales. No se incluyen en la licencia MIT del código de la app y no se afirma permiso comercial para estos recursos. El encabezado y favicon públicos utilizan un icono original de flamenco (`icon.svg`) en lugar del anterior emblema del juego.
 - Las bibliotecas tienen sus propios avisos en vendor/LICENSE-*.txt.
 
 ## Uso y monetización
 
 La aplicación se publica para aprendizaje y planificación de equipos, sin anuncios ni cobros. Que un proyecto sea gratuito, cite sus fuentes o incluya este aviso no demuestra por sí solo que tenga autorización sobre todo el material usado.
 
-Antes de monetizar: obtener autorizaciones por escrito que cubran distribución y uso comercial de los recursos ajenos, o sustituirlos por recursos originales con derechos claros. Una autorización de R6Calls no se presume extensible a Ubisoft u otros titulares. Revisar las condiciones del programa publicitario y el contenido original propio. Las políticas de vídeos de Ubisoft no se toman como una licencia general de redistribución de una app de mapas.
+Antes de aceptar donaciones, publicidad o cualquier otra monetización: contactar primero a DudeKiller, tal como solicita su respuesta, y resolver por separado los derechos del material de Ubisoft y de terceros, o sustituirlo por recursos originales con derechos claros. No se interpreta la autorización de R6Calls como extensible a Ubisoft. Revisar las condiciones de cada plataforma y el contenido original propio. Las políticas de vídeos de Ubisoft no se toman como una licencia general de redistribución de una app de mapas.
 
 ## Nombre
 
-Se mantiene el nombre elegido R6- flamingo/strat, indicando claramente que es comunitario. R6 y Rainbow Six se usan para identificar el juego; no se afirma que ello elimine cualquier riesgo de marca. Una alternativa con menor dependencia visual de marcas ajenas sería Flamingo/Strat con un emblema propio y una descripción del juego compatible. Cambiar la marca visible queda pendiente de una decisión del responsable.
+Se mantiene el nombre elegido R6- flamingo/strat, indicando claramente que es comunitario y con emblema propio. R6 y Rainbow Six se usan para identificar el juego; no se afirma que ello elimine cualquier riesgo de marca. Cambiar el nombre visible por Flamingo/Strat sigue siendo una decisión del responsable.
 
 Fuentes consultadas el 11 de octubre de 2026:
 - https://www.ubisoft.com/en-us/help/connectivity-and-performance/article/posting-copyrighted-ubisoft-material/000062649

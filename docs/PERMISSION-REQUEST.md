@@ -1,6 +1,6 @@
 # Solicitud de autorización a R6Calls
 
-Estado: solicitud publicada el 11 de octubre de 2026 en https://github.com/Guidufox/breach-r6-atlas/issues/1, con mención al desarrollador cuyo perfil público identifica a DudeKiller. El repositorio de origen tiene Issues deshabilitado. No se afirma que haya respuesta, aceptación ni autorización. El panel About de https://www.r6calls.com/ identifica a DudeKiller como desarrollador y ofrece R6Calls Discord (https://discord.gg/uFXfpMnD57) como canal de contacto. No se adivinan correos ni cuentas privadas. Confirmar un canal utilizable antes de enviar.
+Estado: el responsable compartió una respuesta escrita firmada por DudeKiller el 16 de octubre de 2026. Permite el uso del código y datos de mapas/callouts creados por él bajo el aviso MIT, crédito visible y enlace a R6Calls, identificación de modificaciones y uso no comercial. Si el proyecto cambia a uso comercial, solicita contactar primero. No puede conceder derechos sobre arte y marcas de Ubisoft ni de otros terceros. Indica que el canal de Discord de R6Calls es el mejor medio para futuros contactos. La solicitud original se conserva debajo como historial; no representa el estado actual.
 
 ## Mensaje preparado
 

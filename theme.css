@@ -51,6 +51,7 @@
 :root[data-theme="light"] .map-footer,
 :root[data-theme="light"] .detail-foot{color:#546b7a}
 :root[data-theme="light"] .source-label em{color:#354d5c}
+:root[data-theme="light"] .source-label .source-credit{color:#354d5c;text-decoration-color:#607686}
 :root[data-theme="light"] .map-heading .round,
 :root[data-theme="light"] .map-meta,
 :root[data-theme="light"] .floor-tabs button,
