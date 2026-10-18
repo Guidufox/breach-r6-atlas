@@ -5,6 +5,9 @@ export const rooms = sqliteTable('rooms', {
 export const members = sqliteTable('members', {
  id:text('id').primaryKey(), room:text('room').notNull().references(()=>rooms.id,{onDelete:'cascade'}), tokenHash:text('token_hash').notNull(), name:text('name').notNull(), host:integer('host').notNull().default(0), seen:integer('seen').notNull(),
 }, table=>[index('members_room_idx').on(table.room)]);
+export const roomLimits = sqliteTable('room_limits', {
+ key:text('key').primaryKey(), count:integer('count').notNull().default(0), expires:integer('expires').notNull(),
+},table=>[index('room_limits_expiry_idx').on(table.expires)]);
 export const visits = sqliteTable('visits', {
  key:text('key').primaryKey(), day:text('day').notNull(), path:text('path').notNull(), language:text('language').notNull(), count:integer('count').notNull().default(0),
 },table=>[index('visits_day_idx').on(table.day)]);

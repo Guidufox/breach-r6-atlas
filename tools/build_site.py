@@ -9,9 +9,8 @@ for name in ['index.html','app.js','panels.js','theme.js','theme.css','collab-la
     if file.is_file():shutil.copy2(file,out/name)
 import json
 policy=json.loads((root/'content-policy.json').read_text())
-for name in ['maps','vendor','updates','assets']:
+for name in ['maps','vendor','updates']:
     if name=='maps' and not policy.get('mapsEnabled',True):continue
-    if name=='assets' and not policy.get('operatorsEnabled',True):continue
     shutil.copytree(root/name,out/name)
 if not policy.get('operatorsEnabled',True):
     for name in ['operators.js','operators-data.js']:(out/name).unlink(missing_ok=True)

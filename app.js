@@ -48,8 +48,8 @@
   const labelLoads=new Map();
   function loadAssetScript(src){return new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=src;script.onload=resolve;script.onerror=reject;document.head.append(script);});}
   function ensureMapLabels(target){if(!DATA.lazyLabels||target.labels.length||target.labelsLoaded)return Promise.resolve();if(!labelLoads.has(target.id))labelLoads.set(target.id,loadAssetScript('maps/'+target.id+'.labels.js?v=labels-1').then(()=>{target.labels=window.R6_LABELS[target.id]||[];target.labelsLoaded=true;labelLoads.delete(target.id);}).catch(error=>{labelLoads.delete(target.id);throw error;}));return labelLoads.get(target.id);}
-  async function ensureOperatorModule(){operatorLoader ||= loadAssetScript('operators.js?v=icons-1');try{await operatorLoader;}catch(error){operatorLoader=null;throw error;}}
-  async function ensureOperatorImages(){if(floorActions().some(a=>a.operator)){await ensureOperatorModule();await Promise.all(floorActions().filter(a=>a.operator).map(a=>window.R6Operators.asset(a.operator)));renderAnnotations();}}
+  async function ensureOperatorModule(){operatorLoader ||= loadAssetScript('operators.js?v=markers-1');try{await operatorLoader;}catch(error){operatorLoader=null;throw error;}}
+  async function ensureOperatorImages(){if(floorActions().some(a=>a.operator))await ensureOperatorModule();}
 
   function t(key,values={}){const s=window.BREACH_I18N[config.language]?.[key]||window.BREACH_I18N.es[key]||key;return s.replace(/\{(\w+)\}/g,(_,k)=>values[k]??'');}
   function mapName(m=map){return m.names?.[config.language]||m.name;}
@@ -318,14 +318,15 @@
     }
   }
   function operatorBadge(id,x,y,parent){
-    const source=window.R6_OPERATOR_IMAGES?.[id];
-    if(typeof source==='string'&&source.startsWith('data:image/webp;base64,')){
+    const label=window.R6Operators?.label(id);
+    if(label){
       node('circle',{cx:x,cy:y,r:18,fill:'transparent','pointer-events':'all','data-operator-handle':'',cursor:'grab'},parent);
-      node('image',{x:x-5,y:y-5,width:10,height:10,href:source,'data-operator':id,'pointer-events':'none'},parent);
+      node('circle',{cx:x,cy:y,r:5.5,fill:'#15212a',stroke:'#f5cf55','stroke-width':.9,'data-operator':id,'pointer-events':'none'},parent);
+      const letters=node('text',{x,y:y+1.1,'text-anchor':'middle',fill:'#fff7dc','font-size':3.1,'font-family':'Arial, sans-serif','font-weight':700,'pointer-events':'none'},parent);
+      letters.textContent=label;
     }
-    else{ensureOperatorModule().then(()=>window.R6Operators.asset(id)).catch(()=>{});}
+    else{ensureOperatorModule().then(renderAnnotations).catch(()=>{});}
   }
-  document.addEventListener('r6-operator-ready',()=>renderAnnotations());
   function renderNotes(){
     $('floorNotes').value=config.notes[noteKey()]||'';$('notesSubtitle').textContent=mapName()+' / '+floorName(floor);$('annotationCount').textContent=floorActions().length;$('siteNotesBox').hidden=!selectedSite;$('siteNotes').value=selectedSite?(config.siteNotes[map.id+':'+selectedSite.id]||''):'';
     const list=$('annotationList');list.replaceChildren();

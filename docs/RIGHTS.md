@@ -8,12 +8,12 @@ Contacto público elegido por el responsable: https://github.com/Guidufox/breach
 
 - El código original de esta aplicación y su documentación original se distribuyen bajo MIT, en LICENSE.
 - Mapas, gráficos, callouts, traducciones de callouts y datos derivados de R6Calls no se relicencian como código propio. Se conserva LICENSE-R6MAPS.txt (licencia MIT de Jon Capa, 2016, publicada en el repositorio de origen) y FUENTES-NOMBRES.txt. El mantenedor DudeKiller confirmó por escrito al responsable el permiso para el código y los datos que él creó, bajo las condiciones de conservar aviso MIT, dar crédito visible, identificar modificaciones y mantener el proyecto no comercial. La respuesta no cubre material de Ubisoft ni de terceros.
-- `assets/operators/` contiene emblemas de sus respectivos titulares; `assets/operators/sources.json` identifica fuentes oficiales. No se incluyen en la licencia MIT del código de la app y no se afirma permiso comercial para estos recursos. El encabezado y favicon públicos utilizan un icono original de flamenco (`icon.svg`) en lugar del anterior emblema del juego.
+- Los marcadores de operador son círculos y abreviaturas dibujados por la app. Se retiraron las copias de emblemas oficiales, el importador de estos archivos y el antiguo logo del juego del repositorio y la distribución. El encabezado y favicon públicos utilizan un icono original de flamenco (`icon.svg`). Los nombres de personajes siguen identificando contenido del juego; sus titulares conservan sus derechos.
 - Las bibliotecas tienen sus propios avisos en vendor/LICENSE-*.txt.
 
 ## Uso y monetización
 
-La aplicación se publica para aprendizaje y planificación de equipos, sin anuncios ni cobros. Que un proyecto sea gratuito, cite sus fuentes o incluya este aviso no demuestra por sí solo que tenga autorización sobre todo el material usado.
+La aplicación se publica para aprendizaje y planificación de equipos, sin anuncios ni cobros. Los fondos rasterizados de los mapas pueden incorporar arte de Ubisoft o de terceros; el permiso de R6Calls no cubre ese material. Que un proyecto sea gratuito, cite sus fuentes o incluya este aviso no demuestra por sí solo que tenga autorización sobre todo el material usado.
 
 Antes de aceptar donaciones, publicidad o cualquier otra monetización: contactar primero a DudeKiller, tal como solicita su respuesta, y resolver por separado los derechos del material de Ubisoft y de terceros, o sustituirlo por recursos originales con derechos claros. No se interpreta la autorización de R6Calls como extensible a Ubisoft. Revisar las condiciones de cada plataforma y el contenido original propio. Las políticas de vídeos de Ubisoft no se toman como una licencia general de redistribución de una app de mapas.
 

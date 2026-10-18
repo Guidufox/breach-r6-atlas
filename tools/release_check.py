@@ -111,6 +111,8 @@ def check() -> list[str]:
     html = (SITE / "index.html").read_text(encoding="utf-8")
     if (SITE / "r6-logo.png").exists() or "r6-logo.png" in html:
         failures.append("El emblema anterior del juego sigue en la distribución pública.")
+    if (SITE / "assets" / "operators").exists():
+        failures.append("La distribución pública todavía incluye emblemas de operadores.")
     if 'href="https://www.r6calls.com/"' not in html:
         failures.append("Falta el enlace de crédito visible a R6Calls.")
     translations = json.loads((SITE / "ui.js").read_text(encoding="utf-8").split("=", 1)[1].rstrip(";\n"))

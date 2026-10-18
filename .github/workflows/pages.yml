@@ -22,7 +22,7 @@ jobs:
       - name: Preparar archivos publicos
         run: |
           python3 -m pip install Pillow==12.3.0
-          node --test tests/*.test.cjs
+          node --test tests/*.test.cjs team-service/tests/*.test.mjs
           python3 tools/build_site.py
           python3 tools/optimize_maps.py
           python3 tools/release_check.py
