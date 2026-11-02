@@ -1,9 +1,15 @@
 {
-  "checkedAt": "2026-10-26T16:40:39.054787+00:00",
-  "lastSuccess": "2026-10-26T16:40:39.054787+00:00",
+  "checkedAt": "2026-11-02T20:08:22.941415+00:00",
+  "lastSuccess": "2026-11-02T20:08:22.941415+00:00",
   "sourceStatus": "ok",
   "source": "https://www.r6calls.com/data/dataMap.json",
-  "pending": [],
+  "pending": [
+    {
+      "id": "villa",
+      "installed": 8,
+      "available": 12
+    }
+  ],
   "reviewOwner": "Guidufox",
   "scope": "Version metadata only; not a certification of map geometry, callout correctness or gameplay changes."
 }
