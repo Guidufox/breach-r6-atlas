@@ -20,7 +20,7 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
   try{
-    for(const viewport of [{width:390,height:844},{width:360,height:740}]){
+    for(const viewport of [{width:360,height:740},{width:390,height:844}]){
       const context=await browser.newContext({viewport,deviceScaleFactor:2,isMobile:true,hasTouch:true});
       const page=await context.newPage();
       await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'domcontentloaded'});
