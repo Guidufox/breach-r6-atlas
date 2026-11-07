@@ -20,7 +20,7 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
   try{
-    for(const viewport of [{width:390,height:844},{width:360,height:740}]){
+    for(const viewport of [{width:360,height:740},{width:390,height:844}]){
       const context=await browser.newContext({viewport,deviceScaleFactor:2,isMobile:true,hasTouch:true});
       const page=await context.newPage();
       await page.goto(`http://127.0.0.1:${server.address().port}/`,{waitUntil:'domcontentloaded'});
@@ -30,7 +30,8 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
       assert.ok(size.stage.width>=viewport.width-2&&size.stage.height>=200,`Map too small at ${viewport.width}px`);
       assert.ok(size.zoomVisible,'Zoom controls must be available');
       const start=await zoomValue(page);await page.locator('#zoomIn').click();assert.ok(await zoomValue(page)>start,'Zoom button enlarges the map');
-      const session=await context.newCDPSession(page),x=size.stage.x+size.stage.width/2,y=size.stage.y+size.stage.height*.43;
+      const currentStage=await page.locator('#mapStage').boundingBox();
+      const session=await context.newCDPSession(page),x=currentStage.x+currentStage.width/2,y=currentStage.y+currentStage.height*.43;
       await page.evaluate(()=>{window.mobileEvents=[];for(const name of ['pointerdown','pointermove','pointerup','pointercancel'])document.querySelector('#mapStage').addEventListener(name,e=>window.mobileEvents.push([name,e.pointerId,e.pointerType,Math.round(e.clientX),Math.round(e.clientY)]),true);});
       const before=await zoomValue(page);
       await touch(session,'touchStart',[[x-30,y],[x+30,y]]);
@@ -58,6 +59,10 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
       const beforeFullscreen=await page.locator('#mapHost svg').getAttribute('viewBox');
       await page.locator('#fullscreenBtn').click();
       await page.waitForFunction(()=>document.fullscreenElement?.id==='mapStage');
+      await page.keyboard.press('f');
+      await page.waitForFunction(()=>!document.fullscreenElement);
+      await page.keyboard.press('f');
+      await page.waitForFunction(()=>document.fullscreenElement?.id==='mapStage');
       await page.waitForFunction(()=>{
         const stage=document.querySelector('#mapStage').getBoundingClientRect(),map=document.querySelector('#mapHost svg [id$="-pic"]:not([display="none"])')?.getBoundingClientRect();
         return map&&Math.abs((map.top+map.bottom)/2-(stage.top+stage.bottom)/2)<stage.height*.16;
@@ -73,12 +78,17 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
       assert.ok(full.tools.width<full.stage.width-20,`Fullscreen drawing tools must stay compact: ${JSON.stringify(full)}`);
       assert.ok(await page.locator('#fullscreenMapSelect').isVisible(),'Fullscreen map selector must be visible');
       assert.ok(await page.locator('#fullscreenFloorSelect').isVisible(),'Fullscreen floor selector must be visible');
+      assert.ok(await page.locator('#fullscreenLanguageSelect').isVisible(),'Fullscreen language selector must be visible');
       const nav=await page.locator('.fullscreen-navigator').boundingBox();
       assert.ok(nav.x>=0&&nav.x+nav.width<=viewport.width+1,`Fullscreen selector must fit the mobile width: ${JSON.stringify(nav)}`);
       await page.locator('#fullscreenBtn').click();await page.waitForFunction(()=>!document.fullscreenElement);
       assert.equal(await page.locator('#mapHost svg').getAttribute('viewBox'),beforeFullscreen,'Leaving fullscreen must restore the previous view');
       if(viewport.width===390){
         await page.locator('#fullscreenBtn').click();await page.waitForFunction(()=>document.fullscreenElement?.id==='mapStage');
+        await page.locator('#fullscreenLanguageSelect').selectOption('en');
+        assert.equal(await page.locator('#languageSelect').inputValue(),'en','Fullscreen language must sync with the header');
+        assert.equal(await page.locator('#mapTitle').innerText(),'Bank','Fullscreen language must translate the current map');
+        assert.equal(await page.evaluate(()=>document.fullscreenElement?.id),'mapStage','Changing language must preserve fullscreen');
         await page.locator('#fullscreenMapSelect').selectOption('chalet');
         await page.waitForFunction(()=>document.querySelector('#mapTitle')?.textContent==='Chalet'&&document.querySelector('#mapHost svg')?.getAttribute('aria-label')==='Chalet');
         assert.equal(await page.evaluate(()=>document.fullscreenElement?.id),'mapStage','Switching maps must preserve fullscreen');
@@ -89,6 +99,8 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
           const stage=document.querySelector('#mapStage').getBoundingClientRect(),picture=document.querySelector('#mapHost svg [id="0-pic"]')?.getBoundingClientRect();
           return picture&&Math.abs((picture.top+picture.bottom)/2-(stage.top+stage.bottom)/2)<stage.height*.16;
         });
+        await page.reload();
+        assert.equal(await page.locator('#languageSelect').inputValue(),'en','Fullscreen language choice must persist');
       }
       console.log(`Mobile ${viewport.width}x${viewport.height}: layout, buttons, pinch, pan and fullscreen OK`);
       await context.close();

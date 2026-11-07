@@ -63,7 +63,7 @@
     for(const [data,attr] of [['placeholder','placeholder'],['title','title'],['label','aria-label']])document.querySelectorAll('[data-'+data+']').forEach(e=>e.setAttribute(attr,t(e.dataset[data])));
     const navigatorLabels={es:['Mapa','Piso'],en:['Map','Floor'],'pt-br':['Mapa','Andar']}[config.language];
     $('fullscreenMapSelect').setAttribute('aria-label',navigatorLabels[0]);$('fullscreenFloorSelect').setAttribute('aria-label',navigatorLabels[1]);
-    $('languageSelect').value=config.language;$('bilingual').checked=config.bilingual;$('studyFavorites').checked=config.studyFavorites;
+    $('languageSelect').value=config.language;$('fullscreenLanguageSelect').value=config.language;$('bilingual').checked=config.bilingual;$('studyFavorites').checked=config.studyFavorites;
     $('labelSize').value=config.labelSize;$('labelSizeValue').textContent=config.labelSize+'%';$('namesLanguage').textContent=languageCode();
     $('practiceKind').value=config.studyKind;renderCallControls();
     renderMapNames();renderMaps();renderFullscreenNavigator();renderHeader();renderFloors();renderSites();renderLayers();renderNotes();renderCalls();renderStudyText();
@@ -474,7 +474,9 @@
   const safeBackup=window.R6Validation.createValidator(DATA,baseRevisions,t);
 
   $('mapSearch').oninput=renderMaps;$('callSearch').oninput=renderCalls;$('allFloors').onchange=renderCalls;
-  $('languageSelect').onchange=()=>{if(!['en','es','pt-br'].includes($('languageSelect').value))return;config.language=$('languageSelect').value;applyLanguage();save();};
+  function changeLanguage(value){if(!['en','es','pt-br'].includes(value))return;config.language=value;applyLanguage();save();}
+  $('languageSelect').onchange=()=>changeLanguage($('languageSelect').value);
+  $('fullscreenLanguageSelect').onchange=()=>changeLanguage($('fullscreenLanguageSelect').value);
   $('bilingual').onchange=()=>{config.bilingual=$('bilingual').checked;renderHeader();renderCalls();save();};
   $('labelSize').oninput=()=>{config.labelSize=Number($('labelSize').value);$('labelSizeValue').textContent=config.labelSize+'%';renderMapNames();save();};
   $('studyFavorites').onchange=()=>{config.studyFavorites=$('studyFavorites').checked;reviewQueue=[];studyLast=null;if(mode==='study')nextStudy();save();};
@@ -506,7 +508,8 @@
     cancelAnimationFrame(fullscreenFrame);
     fullscreenFrame=requestAnimationFrame(()=>{fullscreenFrame=requestAnimationFrame(()=>{if(svg&&document.fullscreenElement===$('mapStage'))fitFloor();});});
   }
-  $('fullscreenBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else{fullscreenView=view?.slice()||null;await $('mapStage').requestFullscreen();}}catch{fullscreenView=null;toast(t('fullscreenError'));}};
+  async function toggleFullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else{fullscreenView=view?.slice()||null;await $('mapStage').requestFullscreen();}}catch{fullscreenView=null;toast(t('fullscreenError'));}}
+  $('fullscreenBtn').onclick=toggleFullscreen;
   document.addEventListener('fullscreenchange',()=>{if(document.fullscreenElement===$('mapStage'))fitFullscreenAfterResize();else if(svg){if(fullscreenView)updateView(fullscreenView);else requestAnimationFrame(()=>requestAnimationFrame(fitFloor));fullscreenView=null;}});
   screen.orientation?.addEventListener?.('change',()=>{if(document.fullscreenElement===$('mapStage'))fitFullscreenAfterResize();});
   $('exportViewBtn').onclick=openShare;$('exportSVG').onclick=exportView;$('exportPNG').onclick=()=>exportRaster('png');$('exportPDF').onclick=()=>exportRaster('pdf');$('exportPlan').onclick=exportPlan;$('importPlan').onchange=importPlan;
@@ -721,7 +724,7 @@
     if(e.target.matches('input,textarea,select')||document.querySelector('dialog[open]'))return;
     if(e.key==='/'){e.preventDefault();$('mapSearch').focus();}
     if(e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();const index=map.floors.indexOf(floor),next=index+(e.key==='ArrowUp'?1:-1);if(map.floors[next]!==undefined)changeFloor(map.floors[next]);}
-    if(e.key.toLowerCase()==='f')fitFloor();
+    if(e.key.toLowerCase()==='f'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();if(e.shiftKey)fitFloor();else toggleFullscreen();return;}
     if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();$('undoBtn').click();return;}
     if(!e.ctrlKey&&!e.metaKey){const tools={v:'move',p:'pin',l:'line',d:'pen'};if(e.key.toLowerCase()==='o')openOperatorPicker();else if(tools[e.key.toLowerCase()])setTool(tools[e.key.toLowerCase()]);}
     if(e.key==='Escape'){selected=null;selectionLayer?.replaceChildren();$('selectedTag').hidden=true;renderCallDetails();}
