@@ -63,7 +63,7 @@
     for(const [data,attr] of [['placeholder','placeholder'],['title','title'],['label','aria-label']])document.querySelectorAll('[data-'+data+']').forEach(e=>e.setAttribute(attr,t(e.dataset[data])));
     const navigatorLabels={es:['Mapa','Piso'],en:['Map','Floor'],'pt-br':['Mapa','Andar']}[config.language];
     $('fullscreenMapSelect').setAttribute('aria-label',navigatorLabels[0]);$('fullscreenFloorSelect').setAttribute('aria-label',navigatorLabels[1]);
-    $('languageSelect').value=config.language;$('bilingual').checked=config.bilingual;$('studyFavorites').checked=config.studyFavorites;
+    $('languageSelect').value=config.language;$('fullscreenLanguageSelect').value=config.language;$('bilingual').checked=config.bilingual;$('studyFavorites').checked=config.studyFavorites;
     $('labelSize').value=config.labelSize;$('labelSizeValue').textContent=config.labelSize+'%';$('namesLanguage').textContent=languageCode();
     $('practiceKind').value=config.studyKind;renderCallControls();
     renderMapNames();renderMaps();renderFullscreenNavigator();renderHeader();renderFloors();renderSites();renderLayers();renderNotes();renderCalls();renderStudyText();
@@ -474,7 +474,9 @@
   const safeBackup=window.R6Validation.createValidator(DATA,baseRevisions,t);
 
   $('mapSearch').oninput=renderMaps;$('callSearch').oninput=renderCalls;$('allFloors').onchange=renderCalls;
-  $('languageSelect').onchange=()=>{if(!['en','es','pt-br'].includes($('languageSelect').value))return;config.language=$('languageSelect').value;applyLanguage();save();};
+  function changeLanguage(value){if(!['en','es','pt-br'].includes(value))return;config.language=value;applyLanguage();save();}
+  $('languageSelect').onchange=()=>changeLanguage($('languageSelect').value);
+  $('fullscreenLanguageSelect').onchange=()=>changeLanguage($('fullscreenLanguageSelect').value);
   $('bilingual').onchange=()=>{config.bilingual=$('bilingual').checked;renderHeader();renderCalls();save();};
   $('labelSize').oninput=()=>{config.labelSize=Number($('labelSize').value);$('labelSizeValue').textContent=config.labelSize+'%';renderMapNames();save();};
   $('studyFavorites').onchange=()=>{config.studyFavorites=$('studyFavorites').checked;reviewQueue=[];studyLast=null;if(mode==='study')nextStudy();save();};
