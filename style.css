@@ -63,3 +63,23 @@ body{display:flex;flex-direction:column;height:100dvh}.topbar{flex-shrink:0}.wor
 
 /* Viewport-sized map when the browser denies the Fullscreen API. */
 .map-stage.fullscreen-fallback{position:fixed;inset:0;width:100vw;height:100dvh;min-height:0;z-index:100;background:var(--bg)}
+
+/* Desktop workspace: keep map controls readable and give the plan more height. */
+.expand-map{border:1px solid var(--accent);color:var(--accent);white-space:nowrap}
+@media(min-width:801px){
+ .map-heading{height:76px;min-height:76px;flex-shrink:0;padding:12px 18px;gap:10px}
+ .map-title-block h1{font-size:28px}
+ .map-heading .eyebrow{font-size:8px}
+ .map-heading .quiet{padding:9px 10px}
+ .panel-controls{padding-top:0;padding-bottom:0}
+ .intro-strip p{min-width:0}
+ .header-actions{flex-wrap:wrap;min-width:0}
+}
+@media(min-width:801px) and (max-width:1400px){.map-meta{display:none}}
+@media(min-width:801px) and (max-width:1200px){
+ .topbar{height:auto;min-height:76px;flex-wrap:wrap;padding:10px 14px;gap:8px 16px}
+ .header-actions{width:100%;justify-content:flex-end}
+ .map-heading{flex-wrap:wrap;height:auto;min-height:76px}
+ .map-title-block{min-width:100px}
+}
+@media(max-width:800px){#expandMapBtn{display:none}}
