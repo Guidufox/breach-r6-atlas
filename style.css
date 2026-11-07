@@ -83,3 +83,39 @@ body{display:flex;flex-direction:column;height:100dvh}.topbar{flex-shrink:0}.wor
  .map-title-block{min-width:100px}
 }
 @media(max-width:800px){#expandMapBtn{display:none}}
+
+/* Calm first view: primary actions in the header, maintenance in More. */
+.more-menu{position:relative;flex:none}
+.more-menu>summary{list-style:none;cursor:pointer;padding:9px 13px;border:1px solid var(--border);border-radius:7px;white-space:nowrap}
+.more-menu>summary::-webkit-details-marker{display:none}
+.more-menu>summary::after{content:" ▾";color:var(--muted)}
+.more-menu>summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.more-menu[open]>summary{color:var(--accent)}
+.more-menu-content{position:absolute;right:0;top:calc(100% + 8px);width:260px;max-width:calc(100vw - 24px);z-index:60;display:flex;flex-direction:column;gap:4px;padding:8px;background:var(--panel);border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 32px #0007}
+.more-menu-content>button,.more-menu-content>a{display:block;width:100%;padding:10px 12px;text-align:left;font-size:12px;line-height:1.4;border-radius:5px;text-decoration:none;color:var(--text)}
+.more-menu-content>a:hover{background:var(--panel2)}
+.more-menu-content #dataFreshness{width:100%;max-width:none;color:var(--accent);border-top:1px solid var(--border);border-radius:0}
+.map-heading>.panel-controls{flex:none;padding:0;gap:0;align-items:center}
+@media(min-width:801px){
+ .topbar{height:64px;min-height:64px;padding:10px 18px;gap:18px;flex-wrap:nowrap}
+ .brand{min-width:0;font-size:18px;flex-shrink:0}
+ .brand-logo{width:36px;height:36px}
+ .header-actions{width:auto;flex-wrap:nowrap;gap:8px}
+ .modes{flex-shrink:0}
+ .modes button{padding:10px 14px}
+ .map-heading{height:64px;min-height:64px;padding:8px 14px;flex-wrap:nowrap}
+ .map-title-block{min-width:0}
+ .map-title-block h1{font-size:25px}
+ .map-heading .quiet{font-size:11px;padding:8px}
+ .map-heading .panel-controls .sidebar-toggle{width:30px;height:34px;min-height:34px}
+ .floorbar{height:42px;min-height:42px}
+}
+@media(min-width:801px) and (max-width:1100px){
+ .topbar{gap:10px;padding:8px 12px}
+ .brand{font-size:16px}
+ .modes button{padding:9px 10px}
+ .header-actions{gap:5px}
+ .map-heading{gap:6px;flex-wrap:wrap;height:auto}
+ .map-title-block{flex:1;min-width:80px}
+ .map-heading .quiet{padding:7px;font-size:10px}
+}

@@ -525,6 +525,11 @@
   }
   $('fullscreenBtn').onclick=toggleFullscreen;
   $('expandMapBtn').onclick=toggleFullscreen;
+  const moreMenu=$('moreMenu');
+  moreMenu.addEventListener('click',event=>{if(event.target.closest('button,a'))moreMenu.open=false;});
+  document.addEventListener('click',event=>{if(!moreMenu.contains(event.target))moreMenu.open=false;});
+  moreMenu.addEventListener('keydown',event=>{if(event.key==='Escape'){moreMenu.open=false;moreMenu.querySelector('summary').focus();event.stopPropagation();}});
+
   document.addEventListener('fullscreenchange',()=>{if(document.fullscreenElement===$('mapStage'))fitFullscreenAfterResize();else if(!$('mapStage').classList.contains('fullscreen-fallback'))restoreMapView();});
   screen.orientation?.addEventListener?.('change',()=>{if(isMapFullscreen())fitFullscreenAfterResize();});
   $('exportViewBtn').onclick=openShare;$('exportSVG').onclick=exportView;$('exportPNG').onclick=()=>exportRaster('png');$('exportPDF').onclick=()=>exportRaster('pdf');$('exportPlan').onclick=exportPlan;$('importPlan').onchange=importPlan;

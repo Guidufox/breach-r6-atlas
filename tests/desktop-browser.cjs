@@ -23,6 +23,14 @@ const server=http.createServer((req,res)=>{
       const page=await context.newPage();
       await page.goto('http://127.0.0.1:'+server.address().port+'/',{waitUntil:'domcontentloaded'});
       await page.locator('#mapHost svg').waitFor();
+      assert.equal(await page.locator('.intro-strip').count(),0,'No introductory banner in first view');
+      assert.equal(await page.locator('#updatesBtn').isVisible(),false,'Maintenance actions start collapsed');
+      await page.locator('#moreMenu summary').click();
+      await page.locator('#updatesBtn').click();
+      await page.locator('#updatesDialog').waitFor({state:'visible'});
+      await page.locator('#updatesDialog [data-close]').click();
+      assert.equal(await page.locator('#moreMenu').getAttribute('open'),null,'Menu closes after action');
+
       const layout=await page.evaluate(()=>({
         width:innerWidth,scroll:document.documentElement.scrollWidth,
         stage:document.querySelector('#mapStage').getBoundingClientRect().toJSON(),
