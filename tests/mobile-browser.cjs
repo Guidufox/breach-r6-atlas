@@ -73,12 +73,17 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
       assert.ok(full.tools.width<full.stage.width-20,`Fullscreen drawing tools must stay compact: ${JSON.stringify(full)}`);
       assert.ok(await page.locator('#fullscreenMapSelect').isVisible(),'Fullscreen map selector must be visible');
       assert.ok(await page.locator('#fullscreenFloorSelect').isVisible(),'Fullscreen floor selector must be visible');
+      assert.ok(await page.locator('#fullscreenLanguageSelect').isVisible(),'Fullscreen language selector must be visible');
       const nav=await page.locator('.fullscreen-navigator').boundingBox();
       assert.ok(nav.x>=0&&nav.x+nav.width<=viewport.width+1,`Fullscreen selector must fit the mobile width: ${JSON.stringify(nav)}`);
       await page.locator('#fullscreenBtn').click();await page.waitForFunction(()=>!document.fullscreenElement);
       assert.equal(await page.locator('#mapHost svg').getAttribute('viewBox'),beforeFullscreen,'Leaving fullscreen must restore the previous view');
       if(viewport.width===390){
         await page.locator('#fullscreenBtn').click();await page.waitForFunction(()=>document.fullscreenElement?.id==='mapStage');
+        await page.locator('#fullscreenLanguageSelect').selectOption('en');
+        assert.equal(await page.locator('#languageSelect').inputValue(),'en','Fullscreen language must sync with the header');
+        assert.equal(await page.locator('#mapTitle').innerText(),'Bank','Fullscreen language must translate the current map');
+        assert.equal(await page.evaluate(()=>document.fullscreenElement?.id),'mapStage','Changing language must preserve fullscreen');
         await page.locator('#fullscreenMapSelect').selectOption('chalet');
         await page.waitForFunction(()=>document.querySelector('#mapTitle')?.textContent==='Chalet'&&document.querySelector('#mapHost svg')?.getAttribute('aria-label')==='Chalet');
         assert.equal(await page.evaluate(()=>document.fullscreenElement?.id),'mapStage','Switching maps must preserve fullscreen');
@@ -89,6 +94,8 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
           const stage=document.querySelector('#mapStage').getBoundingClientRect(),picture=document.querySelector('#mapHost svg [id="0-pic"]')?.getBoundingClientRect();
           return picture&&Math.abs((picture.top+picture.bottom)/2-(stage.top+stage.bottom)/2)<stage.height*.16;
         });
+        await page.reload();
+        assert.equal(await page.locator('#languageSelect').inputValue(),'en','Fullscreen language choice must persist');
       }
       console.log(`Mobile ${viewport.width}x${viewport.height}: layout, buttons, pinch, pan and fullscreen OK`);
       await context.close();
