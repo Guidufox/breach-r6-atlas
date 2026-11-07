@@ -30,7 +30,8 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
       assert.ok(size.stage.width>=viewport.width-2&&size.stage.height>=200,`Map too small at ${viewport.width}px`);
       assert.ok(size.zoomVisible,'Zoom controls must be available');
       const start=await zoomValue(page);await page.locator('#zoomIn').click();assert.ok(await zoomValue(page)>start,'Zoom button enlarges the map');
-      const session=await context.newCDPSession(page),x=size.stage.x+size.stage.width/2,y=size.stage.y+size.stage.height*.43;
+      const currentStage=await page.locator('#mapStage').boundingBox();
+      const session=await context.newCDPSession(page),x=currentStage.x+currentStage.width/2,y=currentStage.y+currentStage.height*.43;
       await page.evaluate(()=>{window.mobileEvents=[];for(const name of ['pointerdown','pointermove','pointerup','pointercancel'])document.querySelector('#mapStage').addEventListener(name,e=>window.mobileEvents.push([name,e.pointerId,e.pointerType,Math.round(e.clientX),Math.round(e.clientY)]),true);});
       const before=await zoomValue(page);
       await touch(session,'touchStart',[[x-30,y],[x+30,y]]);
