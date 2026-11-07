@@ -58,6 +58,10 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
       const beforeFullscreen=await page.locator('#mapHost svg').getAttribute('viewBox');
       await page.locator('#fullscreenBtn').click();
       await page.waitForFunction(()=>document.fullscreenElement?.id==='mapStage');
+      await page.keyboard.press('f');
+      await page.waitForFunction(()=>!document.fullscreenElement);
+      await page.keyboard.press('f');
+      await page.waitForFunction(()=>document.fullscreenElement?.id==='mapStage');
       await page.waitForFunction(()=>{
         const stage=document.querySelector('#mapStage').getBoundingClientRect(),map=document.querySelector('#mapHost svg [id$="-pic"]:not([display="none"])')?.getBoundingClientRect();
         return map&&Math.abs((map.top+map.bottom)/2-(stage.top+stage.bottom)/2)<stage.height*.16;
