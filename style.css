@@ -119,3 +119,6 @@ body{display:flex;flex-direction:column;height:100dvh}.topbar{flex-shrink:0}.wor
  .map-title-block{flex:1;min-width:80px}
  .map-heading .quiet{padding:7px;font-size:10px}
 }
+
+.more-menu-content [data-mode].active{color:var(--accent);background:var(--accent-dim)}
+.map-filters #favoriteMapBtn{margin-left:auto;flex:none;width:28px;height:28px;padding:0;font-size:18px}

@@ -25,6 +25,15 @@ const server=http.createServer((req,res)=>{
       await page.locator('#mapHost svg').waitFor();
       assert.equal(await page.locator('.intro-strip').count(),0,'No introductory banner in first view');
       assert.equal(await page.locator('#updatesBtn').isVisible(),false,'Maintenance actions start collapsed');
+      assert.equal(await page.locator('[data-mode="plan"]').isVisible(),false,'Strategy starts in More');
+      assert.equal(await page.locator('[data-mode="study"]').isVisible(),false,'Practice starts in More');
+      assert.equal(await page.locator('#teamRoomBtn').isVisible(),false,'Team starts in More');
+      await page.locator('#moreMenu summary').click();
+      await page.locator('[data-mode="study"]').click();
+      await page.locator('#studyPrompt').waitFor({state:'visible'});
+      await page.locator('[data-mode="explore"]').click();
+      await page.locator('#studyPrompt').waitFor({state:'hidden'});
+
       await page.locator('#moreMenu summary').click();
       await page.locator('#updatesBtn').click();
       await page.locator('#updatesDialog').waitFor({state:'visible'});
