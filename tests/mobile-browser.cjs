@@ -101,6 +101,18 @@ const zoomValue=async page=>Number((await page.locator('#zoomValue').innerText()
         });
         await page.reload();
         assert.equal(await page.locator('#languageSelect').inputValue(),'en','Fullscreen language choice must persist');
+        await page.evaluate(()=>{document.querySelector('#mapStage').requestFullscreen=()=>Promise.reject(new Error('Fullscreen denied'));});
+        await page.keyboard.press('f');
+        await page.waitForFunction(()=>document.querySelector('#mapStage').classList.contains('fullscreen-fallback'));
+        assert.ok(await page.locator('#fullscreenLanguageSelect').isVisible(),'Fallback must keep fullscreen controls visible');
+        const fallback=await page.locator('#mapStage').boundingBox();
+        assert.ok(fallback.height>=viewport.height-2,'Fallback map must fill the viewport');
+        await page.keyboard.press('f');
+        await page.waitForFunction(()=>!document.querySelector('#mapStage').classList.contains('fullscreen-fallback'));
+        await page.keyboard.press('f');
+        await page.waitForFunction(()=>document.querySelector('#mapStage').classList.contains('fullscreen-fallback'));
+        await page.keyboard.press('Escape');
+        await page.waitForFunction(()=>!document.querySelector('#mapStage').classList.contains('fullscreen-fallback'));
       }
       console.log(`Mobile ${viewport.width}x${viewport.height}: layout, buttons, pinch, pan and fullscreen OK`);
       await context.close();
