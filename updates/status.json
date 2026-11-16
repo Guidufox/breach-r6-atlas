@@ -1,13 +1,18 @@
 {
-  "checkedAt": "2026-11-09T20:34:01.194886+00:00",
-  "lastSuccess": "2026-11-09T20:34:01.194886+00:00",
+  "checkedAt": "2026-11-16T20:10:23.219755+00:00",
+  "lastSuccess": "2026-11-16T20:10:23.219755+00:00",
   "sourceStatus": "ok",
   "source": "https://www.r6calls.com/data/dataMap.json",
   "pending": [
     {
+      "id": "bank",
+      "installed": 11,
+      "available": 12
+    },
+    {
       "id": "border",
       "installed": 9,
-      "available": 10
+      "available": 11
     },
     {
       "id": "villa",
